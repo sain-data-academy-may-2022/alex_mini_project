@@ -1,5 +1,7 @@
 import os
 
+print("why are you running my_functions.py ? it dont do nuffin'")
+
 def print_list(my_list):
     clear_term()
     index = 0
