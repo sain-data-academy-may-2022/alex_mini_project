@@ -1,0 +1,12 @@
+Food
+    Hot
+
+    Cold
+
+    Snacks
+
+
+Drinks
+    Hot
+
+    Cold

@@ -1,0 +1,7 @@
+command line only
+display a menu (probably nested nested)
+exit and menu functions
+error handling
+
+need to write tests to make sure my code isnt janky af
+we will be making graphs and stuff
