@@ -8,6 +8,9 @@ product_list2 = {
         'hot':{1:'coffee',2:'tea'},
         'cold':{1:'cola'}}}
 
+def time_to_add(a,b,c):
+    d = a+b+c
+    return d
 
 my_functions.print_list(product_list1)
 #print(my_functions.list_int_check(product_list1[0],'1'))
