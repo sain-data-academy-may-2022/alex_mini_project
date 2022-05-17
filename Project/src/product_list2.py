@@ -9,7 +9,7 @@ order_form = {
         'name' : 'None', 'address' : 'None', 'post_code' : 'None', 
         'phone_number' : 'None' , 'order_status' : 'None' },
     'items' : { 
-        'item_1' : 'None', 'item_2' : 'None'}
+        'food' : 'None', 'drink' : 'None'}
 }
 
 while exit == False:
@@ -130,8 +130,10 @@ while exit == False:
             orders = False
             
             while orders == False:
+                #my_functions.clear_term()
                 print('Welcome to the order menu\nMenu\n 1 - Print Current Order\n 2 - Create new order\n 3 - Update Order Status\n 4 - Ammend Order Information\n 5 - Delete Order\n 0 - Return to Menu')
                 order_option = input()
+                my_functions.clear_term()
 
                 if order_option == '0': # return to main menu
                     orders = True
@@ -154,15 +156,50 @@ while exit == False:
                             continue
                         
                         order_form['user_data'][key] = input(f'please enter User {key} : ') #user can enter all info manually for dictionary values
-                    
+                   
                     for index in product_list:
-                        my_functions.print_list(product_list[index]) #prints the product lists
-                    
+                        my_functions.print_list(product_list) #prints the product lists
+                                            
                     for key in order_form['items'].keys(): #loops through all keys in the items part of the dictionary
-                        order_form['items'][key] = input(f'please enter customers {key} item')
+                        order_form['items'][key] = input(f'please enter customers {key} item : ')
 
                     order_list[order_number] = order_form # adds the order to the order list
                     print(order_list) #to be commented out
+                
+                elif order_option == '3': #update order status
+                    order_number = input('please enter your order number : ') #function will return list = [order_num, new value]
+                    print('d = delivered\nt = in-transit\n p = pending\nc = cooking')
+                    update = input('please enter the new status : ')
+
+                    if update == 'c' or update == 'cooking': #if characters match, update to appropriate order status
+                        order_list[order_number]['order_status'] = 'cooking'
+                    
+                    elif update == 't' or update == 'in-transit':
+                        order_list[order_number]['order_status'] = 'in-transit'
+                    
+                    elif update == 'd' or update == 'delivered':
+                        order_list[order_number]['order_status'] = 'delivered'
+                    
+                    elif update == 'p' or update == 'pending':
+                        order_list[order_number]['order_status'] = 'pending'
+                    
+                    else:
+                        print('invalid entry')
+
+                elif order_option =='4': #amend order
+                    order_number = input('please enter your order number : ') #when function return list = [order_number,key]
+                    print('name\naddress\npost_code\nphone_number')
+                    key = input('what would you like to ammend? : ')
+                    change = input('enter your ammendment : ')
+                    order_list[order_number][key] = change
+
+                elif order_option == '5' : #delete order
+                    order_number = input('please enter your order number : ')
+                    check = input(f'are you sure you would like to delete order {order_number}? \ny/n : ')
+                    if check == 'y':
+                        order_list.pop(order_number)
+                    else:
+                        continue
 
     else:
         input("\nincorrect input, please try again.\n")
