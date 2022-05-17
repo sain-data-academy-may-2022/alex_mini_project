@@ -1,11 +1,21 @@
 import my_functions # <-- i wrote all the functions in here
+from getpass import getpass
+from logins import logins
 exit = False
+order_list = {}
 product_list = [['sandwich','burrito','burger'], ['cola','coffee','tea']]# the menu
+order_form = { 
+    'user_data': { 
+        'name' : 'None', 'address' : 'None', 'post_code' : 'None', 
+        'phone_number' : 'None' , 'order_status' : 'None' },
+    'items' : { 
+        'item_1' : 'None', 'item_2' : 'None'}
+}
 
 while exit == False:
     my_functions.clear_term()
     print('\nWelcome to the pop-up caf-app')
-    print('Menu\n 1 - Product List\n 2 - Food Menu\n 3 - Drinks Menu\n 0 - Exit Program')
+    print('Menu\n 1 - Product List\n 2 - Food Menu\n 3 - Drinks Menu\n 4 - Order Menu\n 0 - Exit Program')
     option = input('what option would you like? ')
     
     if option.strip().isdigit():
@@ -115,6 +125,44 @@ while exit == False:
                 
                 else:            
                     continue   
+
+        elif option == 4:#enters orders menu
+            orders = False
+            
+            while orders == False:
+                print('Welcome to the order menu\nMenu\n 1 - Print Current Order\n 2 - Create new order\n 3 - Update Order Status\n 4 - Ammend Order Information\n 5 - Delete Order\n 0 - Return to Menu')
+                order_option = input()
+
+                if order_option == '0': # return to main menu
+                    orders = True
+                    continue
+                
+                elif order_option == '1': #prints the current list of orders
+                    print(order_list)
+                
+                elif order_option == '2': #create new order
+                    order_number = input('please enter the order number : ')
+                    
+                    if order_list.__contains__(order_number): # checks if order number already exists
+                        print('\norder number already exists.\n')
+                        continue
+                    
+                    for key in order_form['user_data'].keys(): #loops through all of the keys in the info part of the dictionary
+                        
+                        if key == 'order_status': #sets status to pending for uniformality 
+                            order_form['user_data'][key] = 'pending' 
+                            continue
+                        
+                        order_form['user_data'][key] = input(f'please enter User {key} : ') #user can enter all info manually for dictionary values
+                    
+                    for index in product_list:
+                        my_functions.print_list(product_list[index]) #prints the product lists
+                    
+                    for key in order_form['items'].keys(): #loops through all keys in the items part of the dictionary
+                        order_form['items'][key] = input(f'please enter customers {key} item')
+
+                    order_list[order_number] = order_form # adds the order to the order list
+                    print(order_list) #to be commented out
 
     else:
         input("\nincorrect input, please try again.\n")
