@@ -85,7 +85,7 @@ while exit == False:
             while drinks == False:
                 my_functions.clear_term()
                 print('Drinks\n 1 - Product List\n 2 - Create Product\n 3 - Update Product\n 4 - Delete Product\n 0 - Return To Menu')
-                sec_option = input('What option would you like? ')
+                sec_option = input('What option would you like? ') #prints menu options and takes input
 
                 if sec_option.strip().isdigit():
                     sec_option = int(sec_option)
@@ -100,7 +100,7 @@ while exit == False:
                     
                     elif sec_option == 2:#add drinks item to list
                         list_append = input('please enter the name of your new Drink item ')
-                        if list_append in product_list[0] or list_append in product_list[1]:
+                        if list_append in product_list[0] or list_append in product_list[1]: #makes sure you cannot add duplicate items
                             input('item already on menu, press enter to continue')
                         else:
                             product_list[1].append(list_append)
@@ -127,7 +127,7 @@ while exit == False:
                 else:            
                     continue   
 
-        elif option == 4:#enters orders menu
+        elif option == 4: #enters orders menu
             orders = False
             
             while orders == False:
@@ -148,7 +148,7 @@ while exit == False:
                 elif order_option == '2': #create new order
                     order_number = input('please enter the order number : ')
                     
-                    if order_number in order_list:
+                    if order_number in order_list: #cannot make new order under previously used order id
                         input('\norder number already exists. press enter to continue\n')
                         continue
                     
