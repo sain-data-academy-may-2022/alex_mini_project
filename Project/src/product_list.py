@@ -1,15 +1,14 @@
 import my_functions # <-- i wrote all the functions in here
 from getpass import getpass
-from logins import logins
+import json
+#from logins import logins
 exit = False
-order_list = {'1' : { 
-    'user_data': { 
-        'name' : 'Tim Esting', 'address' : 'holborn', 'post_code' : 'me2', 
-        'phone_number' : '07788221133' , 'order_status' : 'delivered' },
-    'items' : { 
-        'food' : 'None', 'drink' : 'None'}
-    }   }
+order_list = {}
 product_list = [['sandwich','burrito','burger'], ['cola','coffee','tea']]# the menu
+
+list_name = 'order_history.json'
+with open(list_name) as file:
+    order_list = json.load(file)
 
 while exit == False:
     my_functions.clear_term()
@@ -23,6 +22,9 @@ while exit == False:
         if option == 0: #exits the program
             my_functions.clear_term()            
             print('Goodbye!')
+            with open(list_name,'w') as file:
+                new = json.dumps(order_list,indent='    ')
+                file.write(new)
             quit()
             
         elif option == 1: #prints the product list
