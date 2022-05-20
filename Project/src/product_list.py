@@ -4,11 +4,29 @@ import json
 #from logins import logins
 exit = False
 order_list = {}
-product_list = [['sandwich','burrito','burger'], ['cola','coffee','tea']]# the menu
+product_list = [['sandwich','burrito','burger'], ['cola','coffee','tea','lemonade'],["banana","apple","crisps"]]# the menu
 
 list_name = 'order_history.json'
-with open(list_name) as file:
-    order_list = json.load(file)
+try:
+    with open(list_name) as file:
+        order_list = json.load(file)
+except:
+    print(list_name,'not found, new file will be created')
+
+# try:
+#     with open('products.json') as file:
+#         prod_dict = json.load(file)
+        
+# except:
+#     prod_dict = {
+#         'food':[],'drinks':[],'snacks':[]
+#     }
+#     print('products.json not found')
+
+# for key,value in prod_dict.items():
+#     product_list.append(key[value]) 
+#     print(product_list)
+    
 
 while exit == False:
     my_functions.clear_term()
@@ -22,9 +40,20 @@ while exit == False:
         if option == 0: #exits the program
             my_functions.clear_term()            
             print('Goodbye!')
+            
+            #exports my ordr list to .json
             with open(list_name,'w') as file:
                 new = json.dumps(order_list,indent='    ')
                 file.write(new)
+            
+            #convert my list into appropriate dict format for exporting
+            prod_dict = {
+                'food' : product_list[0], 'drinks' : product_list[1], 'snacks' : product_list[2]
+            }
+            with open('products.json','w') as file:
+                new = json.dumps(prod_dict,indent= '    ')
+                file.write(new)
+            
             quit()
             
         elif option == 1: #prints the product list
@@ -52,6 +81,7 @@ while exit == False:
                     
                     elif sec_option == 2:#add food item to list
                         list_append = input('please enter the name of your new Food item ')
+                        
                         if list_append in product_list[0] or list_append in product_list[1]:
                             input('item already on menu, press enter to continue')
                         else:    
@@ -161,15 +191,15 @@ while exit == False:
                     order_number = input('please enter your order number : ') 
                     if order_number in order_list:
                         new_value = my_functions.order_status()
-                        order_list[order_number]['order_status'] = new_value
+                        order_list[order_number]['user_data']['order_status'] = new_value
                     else:
                         input('unknown order number.\nEnter to continue : ')
 
 
                 elif order_option =='4': #amend order
                     order_number = input('please enter your order number : ') 
-                    amendment = my_functions.order_amend(product_list) #function runs you through quick multiple choice menu to update a single item / datapoint in the order information
-                    order_list[order_number][amendment[0]][amendment[1]]= amendment[2] #returned list, each index is the matching key or value in the dictionary.
+                    amendment = my_functions.order_amend(order_list[order_number],product_list) #function runs you through quick multiple choice menu to update the selected order's information
+                    order_list[order_number] = amendment #returned dictionary, each key is either the same or updated and will overrite the original.
                     
                 elif order_option == '5' : #delete order
                     order_number = input('please enter your order number : ')

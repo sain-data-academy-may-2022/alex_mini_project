@@ -1,5 +1,7 @@
-# # import my_functions
-# # product_list1 = [['sandwich','burrito','burger'], ['cola','coffee','tea']] # potential other options
+# import my_functions
+# product_list1 = [['sandwich','burrito','burger'], ['cola','coffee','tea']] # potential other options
+# import getpass
+# from logins import logins
 # # product_list2 = {
 # #     'food': {
 # #         'hot':{1:'burger',2:'burrito'},
@@ -24,7 +26,7 @@
 #         subkey = subkey_dex[0[0[subkey_dex[0[0].index(subkey)]]]]
 # print(subkey)
 
-import json
+#import json
 
 # order_list = {'1' : { 
 #     'user_data': { 
@@ -34,13 +36,27 @@ import json
 #         'food' : 'None', 'drink' : 'None'}
 #     }   }
 
-export = 'order_history.json'
+#export = 'order_history.json'
 
 
-example = 'order_history.json'
-my_d = {}
+# example = 'order_history.json'
+# my_d = {}
 
-with open(example) as file:
-    my_d = json.load(file)
+# with open(example) as file:
+#     my_d = json.load(file)
 
-print(my_d)
+# my_functions.new_order_amend(my_d['1'],product_list1)
+# #print(my_d)
+
+# my_functions.remove_item(product_list1[0])
+# print(product_list1[0])
+import getpass
+from logins import logins
+
+username = input('usernam : ')
+password = getpass.getpass('password : ')
+if username in logins and logins[username] == password:
+    print('welcome', username)
+    #run the program
+else:
+    quit()
