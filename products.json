@@ -1,0 +1,18 @@
+{
+    "food": [
+        "sandwich",
+        "burrito",
+        "burger"
+    ],
+    "drinks": [
+        "cola",
+        "coffee",
+        "tea",
+        "lemonade"
+    ],
+    "snacks": [
+        "banana",
+        "apple",
+        "crisps"
+    ]
+}

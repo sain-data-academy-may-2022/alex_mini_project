@@ -1,6 +1,7 @@
 import os
 
 print("why are you running my_functions.py ? it dont do nuffin'")
+
 def print_list(my_list): #prints a list with indexes
     clear_term()
     index = 0
@@ -84,8 +85,46 @@ def order_status():
         
         else:
             print('invalid entry')
+
+def order_amend(order,product_list):
+    data = input('ammending user data y/n? : ')
+    if data == 'y' or data =='Y': #accepts both capitals and text
+        
+        for key,value in order['user_data'].items(): #runs through each item in the dictionary
+            if key == 'order_status': #skips the order status as that needs to be changed separately
+                    continue
+            
+            print(key,value,'enter ammendment or enter to skip : ')
+            change = input()
+            
+            if change == '':#if they just use enter, they do not update the entry
+                continue
+            else:
+                order['user_data'][key] = change #updates entry in passed dictionary
     
-def order_amend(product_list):
+    items = input('ammending food and drink y/n : ')
+    if items == 'y' or items == 'Y':
+        index = 0
+        for key,value in order['items'].items():
+            while True: #loop used to make sure they can only enter items on the menu
+                print(product_list[index])
+                print(key,value,'enter ammendment or enter to skip : ')
+                change = input()
+                if change == '':
+                    index +=1
+                    continue
+                else:
+                    if change in product_list[index]: #if item is in the menu then great!, else try again
+                        order['items'][key] = change
+                        index +=1
+                        break
+                    else:
+                        input('item not on menu, enter to try again : ')
+                        continue
+            
+    return order #returns the dictionary passed in, but updated with new info
+
+def old_order_amend(product_list): #old and messy. no need to use!
     key_dex =[['0','user_data'],['1','items']]
     key = ''
     subkey_dex = [[['0','1','2','3'],['name','address','post_code','phone_number']],[['0','1'],['food','drink']]]
@@ -149,7 +188,24 @@ def order_amend(product_list):
             input('invalid entry, try again.\n enter to continue : ')
             continue
 
+def get_product_choice(list): #lindas
+    print_list(list)
+    while True:
+        try:
+            which_item = int(input('Please select item: '))
+            if which_item < 0 or which_item >= len(list):
+                print('Please select a valid number')
+            else:
+                return which_item
+        except ValueError:
+            print('Please write a number')
+
+def remove_item(list): #lindas
+    num = get_product_choice(list)
+    del list[num]
+
 def create_order(product_list):
+    #order form is used as a template to itterate through when adding the info
     order_form = { 
     'user_data': { 
         'name' : 'None', 'address' : 'None', 'post_code' : 'None', 
