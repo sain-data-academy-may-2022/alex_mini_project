@@ -1,13 +1,14 @@
 import my_functions  # <-- i wrote all the functions in here
 import order_functions
 import product_functions
-from getpass import getpass
+#from getpass import getpass
 import json
 #from logins import logins
 exit = False
 order_list = {}
-product_list = [['sandwich', 'burrito', 'burger'], [
-    'cola', 'coffee', 'tea', 'lemonade'], ["banana", "apple", "crisps"]]  # the menu
+product_list = [['sandwich', 'burrito', 'burger'], 
+                ['cola', 'coffee', 'tea', 'lemonade'], 
+                ["banana", "apple", "crisps"]]  # the menu
 
 list_name = 'order_history.json'
 try:
@@ -87,7 +88,7 @@ while exit == False:
                         list_append = input(
                             'please enter the name of your new Food item ')
 
-                        if list_append in product_list[0] or list_append in product_list[1]:
+                        if product_functions.duplicate_check(product_list):
                             input('item already on menu, press enter to continue')
                         else:
                             product_list[0].append(list_append)
@@ -100,9 +101,11 @@ while exit == False:
                             continue
 
                         else:  # enter amendment at previously returned index
-                            list_ammend = input(
-                                'enter you ammendment here please ')
-                            product_list[0, list_id] = list_ammend
+                            list_ammend = input('enter you ammendment here please ')
+                            if product_functions.duplicate_check(product_list,list_ammend):
+                                input('entry already exists. enter to continue : ')
+                            else:
+                                product_list[0, list_id] = list_ammend
 
                     elif sec_option == 4:  # removing item from list
                         list_id = product_functions.option_4(product_list[0])
@@ -194,8 +197,7 @@ while exit == False:
                     order_number = input('please enter the order number : ')
 
                     if order_number in order_list:  # cannot make new order under previously used order id
-                        input(
-                            '\norder number already exists. press enter to continue\n')
+                        input('\norder number already exists. press enter to continue\n')
                         continue
 
                     else:
@@ -216,15 +218,14 @@ while exit == False:
                 elif order_option == '4':  # amend order
                     order_number = input('please enter your order number : ')
                     # function runs you through quick multiple choice menu to update the selected order's information
-                    amendment = order_functions.order_amend(
-                        order_list[order_number], product_list)
+                    amendment = order_functions.order_amend(order_list[order_number], product_list)
                     # returned dictionary, each key is either the same or updated and will overrite the original.
                     order_list[order_number] = amendment
 
                 elif order_option == '5':  # delete order
                     order_number = input('please enter your order number : ')
-                    check = input(
-                        f'are you sure you would like to delete order {order_number}? \ny/n : ')
+                    check = input(f'are you sure you would like to delete order {order_number}? \ny/n : ')
+                    
                     if check == 'y':
                         order_list.pop(order_number)
                     else:

@@ -1,5 +1,14 @@
 {
-    "tom" : 0,
-    "dick" : 0,
-    "haryy" : 0
+    "1":{
+        "name" : "tom",
+        "orders": 0
+    },
+    "2":{
+        "name" : "dick",
+        "orders": 0
+    },
+    "3":{
+        "name" : "harry",
+        "orders": 0
+    }
 }

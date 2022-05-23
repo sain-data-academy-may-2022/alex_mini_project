@@ -1,5 +1,6 @@
-# import my_functions
-# product_list1 = [['sandwich','burrito','burger'], ['cola','coffee','tea']] # potential other options
+#import my_functions
+import product_functions
+product_list1 = [['sandwich','burrito','burger'], ['cola','coffee','tea']] # potential other options
 # import getpass
 # from logins import logins
 # # product_list2 = {
@@ -50,13 +51,15 @@
 
 # my_functions.remove_item(product_list1[0])
 # print(product_list1[0])
-import getpass
-from logins import logins
+# import getpass
+# from logins import logins
 
-username = input('usernam : ')
-password = getpass.getpass('password : ')
-if username in logins and logins[username] == password:
-    print('welcome', username)
-    #run the program
-else:
-    quit()
+# username = input('usernam : ')
+# password = getpass.getpass('password : ')
+# if username in logins and logins[username] == password:
+#     print('welcome', username)
+#     #run the program
+# else:
+#     quit()
+my_temp = []
+print(product_functions.duplicate_check(my_temp,None))
