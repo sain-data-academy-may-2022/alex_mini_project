@@ -10,5 +10,5 @@ not a lot of functionality yet. 'watch this space!' to quote almost ever line ma
 
 updated for the sake of the kata
 
-second week of the git kata begins!!!!
 
+second week of the git kata begins!!!! tuesday
