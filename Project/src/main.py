@@ -1,41 +1,20 @@
 import my_functions  # <-- i wrote all the functions in here
 import order_functions
 import product_functions
+import couriers_fun
 #from getpass import getpass
 import json
 #from logins import logins
 exit = False
-order_list = {}
-product_list = [['sandwich', 'burrito', 'burger'], 
-                ['cola', 'coffee', 'tea', 'lemonade'], 
-                ["banana", "apple", "crisps"]]  # the menu
 
-list_name = 'order_history.json'
-try:
-    with open(list_name) as file:
-        order_list = json.load(file)
-except:
-    print(list_name, 'not found, new file will be created')
-
-# try:
-#     with open('products.json') as file:
-#         prod_dict = json.load(file)
-
-# except:
-#     prod_dict = {
-#         'food':[],'drinks':[],'snacks':[]
-#     }
-#     print('products.json not found')
-
-# for key,value in prod_dict.items():
-#     product_list.append(key[value])
-#     print(product_list)
-
+product_list = product_functions.pull_produtcts()
+courier_dict = couriers_fun.pull_couriers()
+order_list = order_functions.pull_orders()
 
 while exit == False:
     my_functions.clear_term()
     print('\nWelcome to the pop-up caf-app')
-    print('Menu\n 1 - Product List\n 2 - Food Menu\n 3 - Drinks Menu\n 4 - Order Menu\n 0 - Exit Program')
+    print('Menu\n 1 - Product List\n 2 - Food Menu\n 3 - Drinks Menu\n 4 - Order Menu\n 5 - couriers\n 0 - Exit Program')
     option = input('what option would you like? ')
 
     if option.strip().isdigit():
@@ -46,17 +25,11 @@ while exit == False:
             print('Goodbye!')
 
             # exports my ordr list to .json
-            with open(list_name, 'w') as file:
-                new = json.dumps(order_list, indent='    ')
-                file.write(new)
-
-            # convert my list into appropriate dict format for exporting
-            prod_dict = {
-                'food': product_list[0], 'drinks': product_list[1], 'snacks': product_list[2]
-            }
-            with open('products.json', 'w') as file:
-                new = json.dumps(prod_dict, indent='    ')
-                file.write(new)
+            order_functions.push_orders(order_list)
+            #updates couriers file with the current version of the dictionary
+            couriers_fun.push_couriers(courier_dict)
+            # convert my list into appropriate dict format for exporting, then exports them
+            product_functions.push_products(product_list[0],product_list[1],product_list[2])
 
             quit()
 
@@ -88,7 +61,7 @@ while exit == False:
                         list_append = input(
                             'please enter the name of your new Food item ')
 
-                        if product_functions.duplicate_check(product_list):
+                        if product_functions.duplicate_check(product_list,list_append):
                             input('item already on menu, press enter to continue')
                         else:
                             product_list[0].append(list_append)
@@ -105,7 +78,7 @@ while exit == False:
                             if product_functions.duplicate_check(product_list,list_ammend):
                                 input('entry already exists. enter to continue : ')
                             else:
-                                product_list[0, list_id] = list_ammend
+                                product_list[0][list_id] = list_ammend
 
                     elif sec_option == 4:  # removing item from list
                         list_id = product_functions.option_4(product_list[0])
@@ -160,7 +133,7 @@ while exit == False:
                         else:  # enter amendment at previously returned index
                             list_ammend = input(
                                 'enter you ammendment here please ')
-                            product_list[1, list_id] = list_ammend
+                            product_list[1][list_id] = list_ammend
 
                     elif sec_option == 4:  # removing item from list
                         list_id = product_functions.option_4(product_list[1])
@@ -230,6 +203,38 @@ while exit == False:
                         order_list.pop(order_number)
                     else:
                         continue
+
+        elif option == 5:
+            couriers = False
+            while couriers == False:
+                my_functions.clear_term()
+                #couriers_fun.print_couriers(courier_dict)
+                print('Welcome to the couriers menu.')
+                courier_entry = input('1 - see all couriers\n2 - add new courier\n3 - remove courier\n0 - return to menu ')
+
+                if courier_entry == '0':
+                    couriers = True 
+                    continue
+
+                elif courier_entry == '1':
+                    couriers_fun.print_couriers(courier_dict)
+                    input()
+
+                elif courier_entry == '2':
+                    id = input('enter courier id')
+                    if id in courier_dict or id == '' or id is None:
+                        input('id already exists/invalid')
+                        continue
+                    else:
+                        courier_dict[id] = couriers_fun.hire_courier()
+
+                elif courier_entry == '3':
+                    print(courier_dict)
+                    to_del = input('Enter id number : ')
+                    if to_del in courier_dict:
+                        del courier_dict[to_del]
+                    else:
+                        input('invalid id, enter to continue : ')
 
     else:
         input("\nincorrect input, please try again.\n")

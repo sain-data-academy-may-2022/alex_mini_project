@@ -1,5 +1,6 @@
 #import my_functions
 import product_functions
+import couriers_fun
 product_list1 = [['sandwich','burrito','burger'], ['cola','coffee','tea']] # potential other options
 # import getpass
 # from logins import logins
@@ -61,5 +62,11 @@ product_list1 = [['sandwich','burrito','burger'], ['cola','coffee','tea']] # pot
 #     #run the program
 # else:
 #     quit()
-my_temp = []
-print(product_functions.duplicate_check(my_temp,None))
+# my_temp = []
+# print(product_functions.duplicate_check(my_temp,None))
+
+import product_functions
+import couriers_fun
+
+# my_list = product_functions.pull_produtcts()
+# product_functions.print_products(my_list)

@@ -1,14 +1,22 @@
 {
-    "1":{
-        "name" : "tom",
+    "1": {
+        "name": "tom",
         "orders": 0
     },
-    "2":{
-        "name" : "dick",
+    "2": {
+        "name": "dick",
         "orders": 0
     },
-    "3":{
-        "name" : "harry",
+    "3": {
+        "name": "harry",
         "orders": 0
+    },
+    "4": {
+        "name": "alex",
+        "open_orders": 0
+    },
+    "5": {
+        "name": "egg-man",
+        "open_orders": 0
     }
 }

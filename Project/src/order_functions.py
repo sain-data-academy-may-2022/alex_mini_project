@@ -1,6 +1,8 @@
 #imports
 import my_functions
+import traceback
 #import product_functions
+import json
 
 def create_order(product_list):
     # order form is used as a template to itterate through when adding the info
@@ -107,3 +109,23 @@ def order_amend(order, product_list):
 
     return order  # returns the dictionary passed in, but updated with new info
 
+def pull_orders():
+    file_name = 'order_history.json'
+    try:
+        with open(file_name) as file:
+            orders = json.load(file)
+    except Exception as e:
+        print(file_name,'not found, new file will be created',e)
+        orders = {}
+        print(traceback.print_exc())
+    return orders
+
+def push_orders(order_list):
+    file_name = 'order_history.json'
+    try:
+        with open(file_name,'w') as file:
+            new = json.dumps(order_list, indent='   ')
+            file.write(new)
+    except Exception as e:
+        print('unable to update / create',file_name)
+        print(traceback.print_exc(),e)
