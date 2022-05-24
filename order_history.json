@@ -5,7 +5,7 @@
          "address": "holborn",
          "post_code": "me2",
          "phone_number": "07788221133",
-         "courier" : "1",
+         "courier": "1",
          "order_status": "delivered"
       },
       "items": {
@@ -19,7 +19,7 @@
          "address": "holborn",
          "post_code": "me2",
          "phone_number": "07788223311",
-         "courier" : "1",
+         "courier": "1",
          "order_status": "delivered"
       },
       "items": {
@@ -33,7 +33,7 @@
          "address": "milton",
          "post_code": "bh8",
          "phone_number": "077",
-         "courier" : "1",
+         "courier": "1",
          "order_status": "pending"
       },
       "items": {
@@ -47,7 +47,7 @@
          "address": "bournemouth",
          "post_code": "bh8",
          "phone_number": "222222",
-         "courier" : "1",
+         "courier": "1",
          "order_status": "cooking"
       },
       "items": {
@@ -55,4 +55,4 @@
          "drink": "coffee"
       }
    }
-         }
+}

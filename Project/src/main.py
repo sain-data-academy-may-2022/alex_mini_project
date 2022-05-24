@@ -3,7 +3,7 @@ import order_functions
 import product_functions
 import couriers_fun
 #from getpass import getpass
-import json
+#import json
 #from logins import logins
 exit = False
 
@@ -38,117 +38,18 @@ while exit == False:
             input("press Enter to return to the menu ")
 
         elif option == 2:  # enters food menu
-            food = False
-
-            while food == False:
-                my_functions.clear_term()
-                print(
-                    'Food\n 1 - Product List\n 2 - Create Product\n 3 - Update Product\n 4 - Delete Product\n 0 - Return To Menu')
-                sec_option = input('What option would you like? ')
-
-                if sec_option.strip().isdigit():
-                    sec_option = int(sec_option)
-
-                    if sec_option == 0:  # return to main menu
-                        food = True
-                        continue
-
-                    elif sec_option == 1:
-                        my_functions.print_list(product_list[0])
-                        input('press Enter to return to the menu')
-
-                    elif sec_option == 2:  # add food item to list
-                        list_append = input(
-                            'please enter the name of your new Food item ')
-
-                        if product_functions.duplicate_check(product_list,list_append):
-                            input('item already on menu, press enter to continue')
-                        else:
-                            product_list[0].append(list_append)
-
-                    elif sec_option == 3:  # update entry
-                        # takes input and checks it is in correct format, returns index
-                        list_id = product_functions.option_3(product_list[0])
-
-                        if list_id is None:  # if an invalid entry was given, return to menu
-                            continue
-
-                        else:  # enter amendment at previously returned index
-                            list_ammend = input('enter you ammendment here please ')
-                            if product_functions.duplicate_check(product_list,list_ammend):
-                                input('entry already exists. enter to continue : ')
-                            else:
-                                product_list[0][list_id] = list_ammend
-
-                    elif sec_option == 4:  # removing item from list
-                        list_id = product_functions.option_4(product_list[0])
-
-                        if list_id is None:  # if invalid entry was given, return to main menu
-                            continue
-
-                        else:
-                            # remove item at returned index
-                            product_list[0].remove(list_id)
-
-                else:
-                    continue
+            my_functions.product_menu('food')            
+            product_list = product_functions.pull_produtcts()
 
         elif option == 3:  # enters drink menu
-            drinks = False
+            my_functions.product_menu('drinks')
+            product_list = product_functions.pull_produtcts()
 
-            while drinks == False:
-                my_functions.clear_term()
-                print(
-                    'Drinks\n 1 - Product List\n 2 - Create Product\n 3 - Update Product\n 4 - Delete Product\n 0 - Return To Menu')
-                # prints menu options and takes input
-                sec_option = input('What option would you like? ')
+        elif option == 4: # enters snacks menu
+            my_functions.product_menu('snacks') #can make return bool (true) if list updated to improve performance ?)
+            product_list = product_functions.pull_produtcts()
 
-                if sec_option.strip().isdigit():
-                    sec_option = int(sec_option)
-
-                    if sec_option == 0:  # return to main menu
-                        drinks = True
-                        continue
-
-                    elif sec_option == 1:
-                        my_functions.print_list(product_list[1])
-                        input('press Enter to return to the menu')
-
-                    elif sec_option == 2:  # add drinks item to list
-                        list_append = input(
-                            'please enter the name of your new Drink item ')
-                        # makes sure you cannot add duplicate items
-                        if list_append in product_list[0] or list_append in product_list[1]:
-                            input('item already on menu, press enter to continue')
-                        else:
-                            product_list[1].append(list_append)
-
-                    elif sec_option == 3:  # update entry
-                        # takes input and checks it is in correct format, returns index
-                        list_id = product_functions.option_3(product_list[1])
-
-                        if list_id is None:  # if an invalid entry was given, return to menu
-                            continue
-
-                        else:  # enter amendment at previously returned index
-                            list_ammend = input(
-                                'enter you ammendment here please ')
-                            product_list[1][list_id] = list_ammend
-
-                    elif sec_option == 4:  # removing item from list
-                        list_id = product_functions.option_4(product_list[1])
-
-                        if list_id is None:  # if invalid entry was given, return to main menu
-                            continue
-
-                        else:
-                            # remove item at returned index
-                            product_list[1].remove(list_id)
-
-                else:
-                    continue
-
-        elif option == 4:  # enters orders menu
+        elif option == 5:  # enters orders menu
             orders = False
 
             while orders == False:
@@ -204,7 +105,7 @@ while exit == False:
                     else:
                         continue
 
-        elif option == 5:
+        elif option == 6:
             couriers = False
             while couriers == False:
                 my_functions.clear_term()
