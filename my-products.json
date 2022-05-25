@@ -1,9 +1,10 @@
 {
     "food": [
-        "blt",
+        "blt sandwich",
         "burrito",
         "burger",
-        "hot-dog"
+        "hot-dog",
+        "chicken and bacon sandwich"
     ],
     "drinks": [
         "cola",

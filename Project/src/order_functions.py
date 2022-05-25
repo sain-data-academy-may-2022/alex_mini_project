@@ -9,7 +9,7 @@ def create_order(product_list):
     order_form = {
         'user_data': {
             'name': 'None', 'address': 'None', 'post_code': 'None',
-            'phone_number': 'None', 'order_status': 'None'},
+            'phone_number': 'None','courier' : "None", 'order_status': 'None'},
         'items': {
             'food': 'None', 'drink': 'None'}
     }
