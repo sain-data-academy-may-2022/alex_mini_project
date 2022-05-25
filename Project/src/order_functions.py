@@ -1,17 +1,22 @@
 #imports
 import my_functions
+import product_functions 
 import traceback
-#import product_functions
+import couriers_fun
+import random
 import json
 
-def create_order(product_list):
+# returns a dictonary with the format of the provided 'order form' dictionary
+def create_order():
+    product_list = product_functions.pull_produtcts()
+    couriers = couriers_fun.pull_couriers()
     # order form is used as a template to itterate through when adding the info
     order_form = {
         'user_data': {
             'name': 'None', 'address': 'None', 'post_code': 'None',
             'phone_number': 'None','courier' : "None", 'order_status': 'None'},
         'items': {
-            'food': 'None', 'drink': 'None'}
+            'food': 'None', 'drink': 'None', 'snack':'None'}
     }
     # loops through all of the keys in the info part of the dictionary
     for key in order_form['user_data'].keys():
@@ -19,12 +24,18 @@ def create_order(product_list):
         if key == 'order_status':  # sets status to pending for uniformality
             order_form['user_data'][key] = 'pending'
             continue
+        if key == 'courier':
+            my_random = random.choice(list(couriers.keys()))
+            order_form['user_data'][key] = my_random
+            couriers[my_random]['open_orders'] +=1
+            couriers_fun.push_couriers(couriers)
+            continue
 
         # user can enter all info manually for dictionary values
         order_form['user_data'][key] = input(f'please enter User {key} : ')
 
-    for index in product_list:
-        my_functions.print_list(product_list)  # prints the product lists
+    
+    my_functions.print_list(product_list)  # prints the product lists
 
     index = 0
     # loops through all keys in the items part of the dictionary
@@ -42,7 +53,7 @@ def create_order(product_list):
 
     return order_form
 
-
+# used for updating the order status key in an order dictonary, returns the new value
 def order_status():
     new_value = ''
     print('d = delivered\nt = in-transit\np = pending\nc = cooking')
@@ -67,8 +78,10 @@ def order_status():
         else:
             print('invalid entry')
 
-
-def order_amend(order, product_list):
+# creates copy of passed order, loops through keys and returns copy so original can be updated
+def order_amend(order):
+    copy = order
+    product_list = product_functions.pull_produtcts
     data = input('ammending user data y/n? : ')
     if data == 'y' or data == 'Y':  # accepts both capitals and text
 
@@ -84,7 +97,7 @@ def order_amend(order, product_list):
                 continue
             else:
                 # updates entry in passed dictionary
-                order['user_data'][key] = change
+                copy['user_data'][key] = change
 
     items = input('ammending food and drink y/n : ')
     if items == 'y' or items == 'Y':
@@ -100,15 +113,16 @@ def order_amend(order, product_list):
                 else:
                     # if item is in the menu then great!, else try again
                     if change in product_list[index]:
-                        order['items'][key] = change
+                        copy['items'][key] = change
                         index += 1
                         break
                     else:
                         input('item not on menu, enter to try again : ')
                         continue
 
-    return order  # returns the dictionary passed in, but updated with new info
+    return copy  # returns the dictionary passed in, but updated with new info
 
+#imports from file
 def pull_orders():
     file_name = 'order_history.json'
     try:
@@ -120,6 +134,7 @@ def pull_orders():
         print(traceback.print_exc())
     return orders
 
+#exports to file
 def push_orders(order_list):
     file_name = 'order_history.json'
     try:
