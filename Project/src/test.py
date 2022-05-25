@@ -1,5 +1,6 @@
 #import my_functions
 import product_functions
+import order_functions
 import couriers_fun
 product_list1 = [['sandwich','burrito','burger'], ['cola','coffee','tea']] # potential other options
 # import getpass
@@ -70,3 +71,5 @@ import couriers_fun
 
 # my_list = product_functions.pull_produtcts()
 # product_functions.print_products(my_list)
+value = order_functions.create_order()
+print(value)

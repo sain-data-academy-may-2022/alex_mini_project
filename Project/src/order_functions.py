@@ -1,10 +1,15 @@
 #imports
 import my_functions
+import product_functions 
 import traceback
+import couriers_fun
+import random
 #import product_functions
 import json
 
-def create_order(product_list):
+def create_order():
+    product_list = product_functions.pull_produtcts()
+    couriers = couriers_fun.pull_couriers()
     # order form is used as a template to itterate through when adding the info
     order_form = {
         'user_data': {
@@ -19,6 +24,9 @@ def create_order(product_list):
         if key == 'order_status':  # sets status to pending for uniformality
             order_form['user_data'][key] = 'pending'
             continue
+        if key == 'courier':
+            my_random = random.choice(couriers)
+            order_form['user_data'][key] = my_random
 
         # user can enter all info manually for dictionary values
         order_form['user_data'][key] = input(f'please enter User {key} : ')
@@ -41,7 +49,6 @@ def create_order(product_list):
                 input('please enter a valid input. enter to continue : ')
 
     return order_form
-
 
 def order_status():
     new_value = ''
@@ -67,8 +74,9 @@ def order_status():
         else:
             print('invalid entry')
 
-
-def order_amend(order, product_list):
+def order_amend(order):
+    copy = order
+    product_list = product_functions.pull_produtcts
     data = input('ammending user data y/n? : ')
     if data == 'y' or data == 'Y':  # accepts both capitals and text
 
@@ -84,7 +92,7 @@ def order_amend(order, product_list):
                 continue
             else:
                 # updates entry in passed dictionary
-                order['user_data'][key] = change
+                copy['user_data'][key] = change
 
     items = input('ammending food and drink y/n : ')
     if items == 'y' or items == 'Y':
@@ -100,14 +108,14 @@ def order_amend(order, product_list):
                 else:
                     # if item is in the menu then great!, else try again
                     if change in product_list[index]:
-                        order['items'][key] = change
+                        copy['items'][key] = change
                         index += 1
                         break
                     else:
                         input('item not on menu, enter to try again : ')
                         continue
 
-    return order  # returns the dictionary passed in, but updated with new info
+    return copy  # returns the dictionary passed in, but updated with new info
 
 def pull_orders():
     file_name = 'order_history.json'

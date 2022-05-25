@@ -9,6 +9,20 @@ def hire_courier():
     print(courier)
     return courier
 
+# loops through the courier info and allows you to update. returns an updated ditctoinary
+def update_courier(courier):
+    copy = courier
+    for key, value in courier.items():
+        print(key, value,'enter ammendment or enter to skip : ')
+        change = input()
+
+        if change == '':# if nothing was entered
+            continue
+        else:
+            copy[key] = change
+
+    return copy
+
 #updates the couriers.json file with the provided dictionary
 def push_couriers(couriers):
     file_name = 'couriers.json'
