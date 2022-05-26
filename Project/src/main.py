@@ -1,7 +1,6 @@
-import my_functions  # <-- i wrote all the functions in here
-import product_functions
+#imports
+import my_functions 
 #from getpass import getpass
-#import json
 #from logins import logins
 exit = False
 while exit == False:
