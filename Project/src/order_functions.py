@@ -84,7 +84,6 @@ def order_amend(order):
     product_list = product_functions.pull_produtcts
     data = input('ammending user data y/n? : ')
     if data == 'y' or data == 'Y':  # accepts both capitals and text
-
         # runs through each item in the dictionary
         for key, value in order['user_data'].items():
             if key == 'order_status':  # skips the order status as that needs to be changed separately
