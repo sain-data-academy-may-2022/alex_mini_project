@@ -53,6 +53,69 @@ def create_order():
 
     return order_form
 
+def order_menu_amend():
+    order_number = input('please enter your order number : ')
+    order_list = pull_orders()
+    # function runs you through quick multiple choice menu to update the selected order's information
+    amendment = order_amend(order_list[order_number])
+    # returned dictionary, each key is either the same or updated and will overrite the original.
+    order_list[order_number] = amendment
+    push_orders(order_list)
+
+def order_menu_create():
+    order_list = pull_orders()
+    order_number = input('please enter the order number : ')
+    if order_number in order_list:  # cannot make new order under previously used order id
+        input('\norder number already exists. press enter to continue\n')
+        return False
+
+    else:
+        # user fills in order information. returns dictionary
+        order_info = create_order()
+        # adds the order to the order list
+        order_list[order_number] = order_info
+        push_orders(order_list)
+        input('order added to order history.\nenter to continue : ')
+        return True
+
+def order_menu_delete():
+    order_number = input('please enter your order number : ')
+    check = input(f'are you sure you would like to delete order {order_number}? \ny/n : ')
+    
+    if check == 'y':
+        order_list = pull_orders()
+        order_list.pop(order_number)
+        push_orders(order_list)
+        return True
+    else:
+        return False
+
+def order_menu_update():
+    order_number = input('please enter your order number : ')
+    order_list = pull_orders()        
+    # if entry in dict, call update function, assign value and then update source file. else return to menu
+    if order_number in order_list:
+        new_value = order_status()
+        order_list[order_number]['user_data']['order_status'] = new_value
+        push_orders(order_list)
+        return True
+    
+    else:
+        input('unknown order number.\nEnter to continue : ')
+        return False
+
+def print_orders():
+    order_list = pull_orders()
+    print('-----------------------------------------')
+    for key in order_list:
+        
+        print('\nname         : ', order_list[key]['user_data']['name'],'\naddress      : ', order_list[key]['user_data']['address'],
+              '\npost code    : ', order_list[key]['user_data']['post_code'],'\nphone number : ', order_list[key]['user_data']['phone_number'],
+              '\ncourier      : ', order_list[key]['user_data']['courier'],'\nstatus       : ', order_list[key]['user_data']['order_status'])
+        print('\nfood         : ', order_list[key]['items']['food'],'\ndrink        : ',order_list[key]['items']['drink'], 
+              '\nsnack        : ', order_list[key]['items']['snack'])
+        print('-----------------------------------------')
+
 # used for updating the order status key in an order dictonary, returns the new value
 def order_status():
     new_value = ''

@@ -5,7 +5,13 @@ class Products:
         self.price = price
     
     def print_self(self):
-        print(self.name,':',self.price)
+        if self.is_vegan:
+            print(self.name,':',self.price,'Vegan')
+        else:
+            print(self.name,':',self.price)
+
+    def get_self(self):
+        return{'name':self.name,'price':self.price,'vegan':self.is_vegan}
     
     def rename(self,new_name : str):
         self.name = new_name
