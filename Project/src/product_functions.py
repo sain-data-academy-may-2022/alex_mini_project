@@ -3,7 +3,7 @@ import json
 import traceback
 
 # returns the contents of my-products.json as a nested list
-def pull_produtcts():
+def pull_produtcts(): 
     products = []
     file_name = 'my-products.json'
     try:
@@ -33,7 +33,7 @@ def push_products(food,drinks,snacks):
         print(traceback.print_exc(),e)
 
 # prints all entrys in list (includes index for all nested lists also. needs formatting for easier reading!!!!)
-def print_products(products):
+def print_products(products: list):
     x = 0
     for ind in products:
         if type(ind) == list:

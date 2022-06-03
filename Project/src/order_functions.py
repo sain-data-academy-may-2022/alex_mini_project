@@ -25,6 +25,7 @@ def create_order():
             order_form['user_data'][key] = 'pending'
             continue
         if key == 'courier':
+            print(couriers.keys())
             my_random = random.choice(list(couriers.keys()))
             order_form['user_data'][key] = my_random
             couriers[my_random]['open_orders'] +=1
@@ -56,11 +57,16 @@ def create_order():
 def order_menu_amend():
     order_number = input('please enter your order number : ')
     order_list = pull_orders()
-    # function runs you through quick multiple choice menu to update the selected order's information
-    amendment = order_amend(order_list[order_number])
-    # returned dictionary, each key is either the same or updated and will overrite the original.
-    order_list[order_number] = amendment
-    push_orders(order_list)
+    if order_number in order_list.keys():
+        # function runs you through quick multiple choice menu to update the selected order's information
+        amendment = order_amend(order_list[order_number])
+        # returned dictionary, each key is either the same or updated and will overrite the original.
+        order_list[order_number] = amendment
+        push_orders(order_list)
+        return True
+    else:
+        input('order not in list\nenter to continue : ')
+        return False
 
 def order_menu_create():
     order_list = pull_orders()
@@ -68,7 +74,9 @@ def order_menu_create():
     if order_number in order_list:  # cannot make new order under previously used order id
         input('\norder number already exists. press enter to continue\n')
         return False
-
+    elif order_number == '' or  not order_number.strip().isdigit():
+        input('\nplease enter a valid input\n enter to continue : ')
+        return False
     else:
         # user fills in order information. returns dictionary
         order_info = create_order()
@@ -81,12 +89,18 @@ def order_menu_create():
 def order_menu_delete():
     order_number = input('please enter your order number : ')
     check = input(f'are you sure you would like to delete order {order_number}? \ny/n : ')
-    
-    if check == 'y':
-        order_list = pull_orders()
-        order_list.pop(order_number)
-        push_orders(order_list)
-        return True
+    order_list = pull_orders()
+
+    if check == 'y' or check == 'Y':
+        if order_number in order_list.keys():
+            order_list.pop(order_number)
+            push_orders(order_list)
+            return True
+        
+        else:
+            input('order not found\nenter to continue : ')
+            return False
+
     else:
         return False
 
@@ -94,7 +108,7 @@ def order_menu_update():
     order_number = input('please enter your order number : ')
     order_list = pull_orders()        
     # if entry in dict, call update function, assign value and then update source file. else return to menu
-    if order_number in order_list:
+    if order_number in order_list.keys():
         new_value = order_status()
         order_list[order_number]['user_data']['order_status'] = new_value
         push_orders(order_list)
@@ -119,9 +133,9 @@ def print_orders():
 # used for updating the order status key in an order dictonary, returns the new value
 def order_status():
     new_value = ''
-    print('d = delivered\nt = in-transit\np = pending\nc = cooking')
-    update = input('please enter the new status : ')
     while True:
+        print('d = delivered\nt = in-transit\np = pending\nc = cooking')
+        update = input('please enter the new status : ')
         if update == 'c' or update == 'cooking':  # if characters match, update to appropriate order status
             new_value = 'cooking'
             return new_value
