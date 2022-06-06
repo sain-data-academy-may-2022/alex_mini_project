@@ -5,7 +5,6 @@ import couriers_fun
 
 # the order menu. options to add, update and delete can be accessed here
 def orders_menu():
-    order_list = order_functions.pull_orders()
     #product_list = product_functions.pull_produtcts()
     orders = False
 
@@ -20,51 +19,19 @@ def orders_menu():
             continue
 
         elif order_option == '1':  # prints the current dictionary of orders
-            for key in order_list:
-                print(order_list[key])
-            input('press enter to return to menu : ')
+            order_functions.print_orders()
 
         elif order_option == '2':  # create new order
-            order_number = input('please enter the order number : ')
-
-            if order_number in order_list:  # cannot make new order under previously used order id
-                input('\norder number already exists. press enter to continue\n')
-                continue
-
-            else:
-                # user fills in order information. returns dictionary
-                order_info = order_functions.create_order()
-                # adds the order to the order list
-                order_list[order_number] = order_info
-                order_functions.push_orders(order_list)
-                input('order added to order history.\nenter to continue : ')
+            order_functions.order_menu_create()
 
         elif order_option == '3':  # update order status
-            order_number = input('please enter your order number : ')
-            if order_number in order_list:
-                new_value = order_functions.order_status()
-                order_list[order_number]['user_data']['order_status'] = new_value
-                order_functions.push_orders(order_list)
-            else:
-                input('unknown order number.\nEnter to continue : ')
+            order_functions.order_menu_update()
 
         elif order_option == '4':  # amend order
-            order_number = input('please enter your order number : ')
-            # function runs you through quick multiple choice menu to update the selected order's information
-            amendment = order_functions.order_amend(order_list[order_number])
-            # returned dictionary, each key is either the same or updated and will overrite the original.
-            order_list[order_number] = amendment
-            order_functions.push_orders(order_list)
+            order_functions.order_menu_amend()
 
         elif order_option == '5':  # delete order
-            order_number = input('please enter your order number : ')
-            check = input(f'are you sure you would like to delete order {order_number}? \ny/n : ')
-            
-            if check == 'y':
-                order_list.pop(order_number)
-                order_functions.push_orders(order_list)
-            else:
-                continue
+            order_functions.order_menu_delete()
 
 def print_list(my_list):  # prints a list with indexes
     #clear_term()
