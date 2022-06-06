@@ -1,6 +1,7 @@
 import my_functions
 import json
 import traceback
+import products
 
 # returns the contents of my-products.json as a nested list
 def pull_produtcts(): 
