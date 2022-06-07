@@ -1,9 +1,10 @@
 import my_functions
 import json
 import traceback
+import products
 
 # returns the contents of my-products.json as a nested list
-def pull_produtcts():
+def pull_produtcts(): 
     products = []
     file_name = 'my-products.json'
     try:
@@ -33,7 +34,7 @@ def push_products(food,drinks,snacks):
         print(traceback.print_exc(),e)
 
 # prints all entrys in list (includes index for all nested lists also. needs formatting for easier reading!!!!)
-def print_products(products):
+def print_products(products: list):
     x = 0
     for ind in products:
         if type(ind) == list:
@@ -58,7 +59,7 @@ def option_3(product_list):
     my_functions.print_list(product_list)  # prints product list, along with index ids
     entry = input(
         'please enter the id or name of the item you wish to update ')
-    list_id = list_int_check(product_list, entry)
+    list_id = prod_input_to_index(product_list, entry)
     return list_id
 
 # the menu part of the food/drinks/snacks delete item option
@@ -70,7 +71,7 @@ def option_4(product_list):
     return list_id
 
 #returns the in index from a list, takes both string and int as input
-def list_int_check(product_list, list_id):
+def prod_input_to_index(product_list, list_id):
     if list_id.strip().isdigit():  # if input is a number convert to int
         list_id = int(list_id)
 

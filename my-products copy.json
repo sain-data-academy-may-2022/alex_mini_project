@@ -1,0 +1,36 @@
+{
+    "food": [
+        {"blt sandwich":{   
+            "Price": 2.00,
+            "Vegan": false            
+        }},
+        {"burrito":{
+            "Price": 3.00,
+            "Vegan": false
+        }},
+        {"burger":{
+            "Price": 3.20,
+            "Vegan": false
+        }},
+        {"hot-dog": {
+            "Price": 2.50,
+            "Vegan": true
+        }},
+        {"chicken and bacon sandwich":{
+            "Price": 2.00,
+            "Vegan": false
+        }}
+    ],
+    "drinks": [
+        "cola",
+        "coffee",
+        "tea",
+        "lemonade",
+        "chai tea"
+    ],
+    "snacks": [
+        "banana",
+        "apple",
+        "crisps"
+    ]
+}

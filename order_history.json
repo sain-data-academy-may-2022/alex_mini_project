@@ -10,7 +10,8 @@
       },
       "items": {
          "food": "burrito",
-         "drink": "tea"
+         "drink": "tea",
+         "snack" : "None"
       }
    },
    "2": {
@@ -24,7 +25,8 @@
       },
       "items": {
          "food": "burger",
-         "drink": "coffee"
+         "drink": "coffee",
+         "snack" : "None"
       }
    },
    "3": {
@@ -38,7 +40,8 @@
       },
       "items": {
          "food": "burrito",
-         "drink": "cola"
+         "drink": "cola",
+         "snack" : "None"
       }
    },
    "4": {
@@ -52,7 +55,8 @@
       },
       "items": {
          "food": "burrito",
-         "drink": "coffee"
+         "drink": "coffee",
+         "snack" : "None"
       }
    },
    "5": {
@@ -66,7 +70,23 @@
       },
       "items": {
          "food": "blt sandwich",
-         "drink": "coffee"
+         "drink": "coffee",
+         "snack" : "None"
+      }
+   },
+   "7": {
+      "user_data": {
+         "name": "rob",
+         "address": "bournemouth",
+         "post_code": "bh8",
+         "phone_number": "077777",
+         "courier": "5",
+         "order_status": "pending"
+      },
+      "items": {
+         "food": "burger",
+         "drink": "lemonade",
+         "snack": "apple"
       }
    }
 }
