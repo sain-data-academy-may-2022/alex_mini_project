@@ -2,6 +2,7 @@ import my_functions
 import json
 import traceback
 import products
+from db import db
 
 # returns the contents of my-products.json as a nested list
 def pull_produtcts(): 
@@ -20,6 +21,31 @@ def pull_produtcts():
             products.append([])
     #my_functions.print_list(products)
     return products
+
+def master_pull():
+    connect = db.establish()
+    prods = []
+    
+    prods.append(new_pull_products(connect,"food"))
+    prods.append(new_pull_products(connect,'drinks'))
+    prods.append(new_pull_products(connect,'snack'))
+    
+    db.shut_down(connect)
+    return prods
+
+def new_pull_products(connect,table):
+    sql = f'SELECT * FROM {table}'
+    val = (table)
+    cursor = connect.cursor()
+    cursor.execute(sql)
+    desc = cursor.description
+    col_names = [col[0] for col in desc]
+    orders = [dict(zip(col_names, row)) 
+        for row in cursor.fetchall()]
+    return orders
+
+def new_push_products(food,drinks,snacks):
+    pass
 
 # updates the my-products.json file with a provided set of datapoints
 def push_products(food,drinks,snacks):

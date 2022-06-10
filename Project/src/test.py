@@ -3,13 +3,13 @@
 #import random
 #impoort json
 #import os
-#import product_functions as pf
-import order_functions as of
+import product_functions as pf
+#import order_functions as of
 #import couriers_fun as cf
 #import db
 #import orders
 #import couriers
 
 
-of.create_order()
-of.print_order()
+egg =pf.master_pull()
+input(f'{egg}')
