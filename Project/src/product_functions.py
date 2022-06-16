@@ -81,7 +81,7 @@ def master_pull():
 def table_checker(table:str, push=False, name=False, update=False):
     if update == True:
         if table == 'food':
-            sql = "update food set (name,price,vegan) where food_id = %s VALUES (%s,%s,%s)"
+            sql = "update food set name = %s, price = %s, vegan = %s where food_id = %s"
             return sql
         elif table == 'drinks':
             sql = "update drinks set (name,price,vegan) where (drinks_id) VALUES (%s,%s,%s,%s)"
@@ -154,7 +154,6 @@ def pull_product_by_name(table:str,name:str):
     cursor = connect.cursor()
     sql = table_checker(table)
     sql +=' WHERE name = %s'
-    print(sql)
     val = (name)
 
     cursor.execute(sql,val)
@@ -202,7 +201,8 @@ def push_product(table:str,prod:dict):
 def push_updated_product(table:str,prod:dict):
 
     sql = table_checker(table,update=True)
-    val = (prod['product_id'],prod['name'],prod['price'],prod['vegan'])
+    print(sql)
+    val = (prod['name'],prod['price'],prod['vegan'],prod['product_id'])
     try:
         db.connect_execute_close_with_val(sql,val)
     except Exception as e:

@@ -21,10 +21,3 @@ from db import db
 # pf.push_updated_product(id,mdict)
 #print(output)
 
-prod = pf.pull_product_by_name('food','burger')
-print(prod)
-pf.push_updated_product('food',prod)
-
-
-input()
-#db.shut_down(connect)
