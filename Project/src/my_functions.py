@@ -3,36 +3,44 @@ import product_functions
 import order_functions
 import couriers_fun
 
+
+def orders_menu_select(order_option):
+    if order_option == '0':  # return to main menu
+        return False
+
+    elif order_option == '1':  # prints the current dictionary of orders
+        order_functions.print_orders()
+        input()
+        return True
+
+    elif order_option == '2':  # create new order
+        order_functions.create_order()
+        return True
+
+    elif order_option == '3':  # update order status
+        order_functions.order_menu_update()
+        return True
+
+    elif order_option == '4':  # amend order
+        order_functions.order_menu_amend()
+        return True
+
+    elif order_option == '5':  # delete order
+        order_functions.order_menu_delete()
+        return True
+
 # the order menu. options to add, update and delete can be accessed here
 def orders_menu():
     #product_list = product_functions.pull_produtcts()
-    orders = False
+    orders = True
 
-    while orders == False:
+    while orders == True:
         clear_term()
         print('Welcome to the order menu\nMenu\n 1 - Print active orders\n 2 - Create new order\n 3 - Update Order Status\n 4 - Ammend Order Information\n 5 - Delete Order\n 0 - Return to Menu')
         order_option = input()
         clear_term()
-
-        if order_option == '0':  # return to main menu
-            orders = True
-            continue
-
-        elif order_option == '1':  # prints the current dictionary of orders
-            order_functions.print_orders()
-
-        elif order_option == '2':  # create new order
-            order_functions.order_menu_create()
-
-        elif order_option == '3':  # update order status
-            order_functions.order_menu_update()
-
-        elif order_option == '4':  # amend order
-            order_functions.order_menu_amend()
-
-        elif order_option == '5':  # delete order
-            order_functions.order_menu_delete()
-
+        orders = orders_menu_select(order_option)
+    
 def print_list(my_list):  # prints a list with indexes
     #clear_term()
     index = 0
@@ -44,116 +52,130 @@ def clear_term():  # clears the terminal
     os.system('clear')
 
 #the interactive menu for each of the different product menus. options to add, update and delete can be accessed here
-def product_menu(product_type):
-    if product_type == 'food':
-        version = 0
-    elif product_type == 'drinks':
-        version = 1
-    elif product_type == 'snacks':
-        version = 2
-    else:
-        return False
-    menu = False
-    product_list = product_functions.pull_produtcts()
-    while menu == False:
+def product_menu(product_type,index):
+    menu = True
+    product_list = product_functions.pull_product_names()
+    while menu == True:
         clear_term()
         print(
             'Food\n 1 - Product List\n 2 - Create Product\n 3 - Update Product\n 4 - Delete Product\n 0 - Return To Menu')
         sec_option = input('What option would you like? ')
+        menu = product_menu_input(sec_option,product_type,product_list,index)
 
-        if sec_option.strip().isdigit():
-            sec_option = int(sec_option)
+def product_menu_input(sec_option,version,product_list,index):
+    clear_term()
+    if sec_option.strip().isdigit():
+        sec_option = int(sec_option)
 
-            if sec_option == 0:  # return to main menu
-                menu = True
-                product_functions.push_products(product_list[0],product_list[1],product_list[2])
-                continue
+        if sec_option == 0:  # return to main menu
+            return False
 
-            elif sec_option == 1:
-                print_list(product_list[version])
-                input('press Enter to return to the menu')
+        elif sec_option == 1:
+            product_functions.print_products(version)
+            input('press Enter to return to the menu : ')
+            return True
 
-            elif sec_option == 2:  # add item to list
-                list_append = input(
-                    'please enter the name of your new item ')
+        elif sec_option == 2:  # add item to list
+            list_append = input(
+                'please enter the name of your new item ')
 
-                if product_functions.duplicate_check(product_list,list_append):
-                    input('item already on menu, press enter to continue')
-                else:
-                    product_list[version].append(list_append)
+            if product_functions.duplicate_check(product_list,list_append):
+                input('item already on menu, press enter to continue : ')
 
-            elif sec_option == 3:  # update entry
-                # takes input and checks it is in correct format, returns index
-                list_id = product_functions.option_3(product_list[version])
+            else:
+                prod = product_functions.create_product(list_append)
+                product_functions.push_product(version,prod)
 
-                if list_id is None:  # if an invalid entry was given, return to menu
-                    continue
+        elif sec_option == 3:  # update entry
+            # takes input and checks it is in correct format, returns index
+            list_id = product_functions.option_3(product_list[index],version)
+            
+            if list_id is None:  # if an invalid entry was given, return to menu
+                return True
 
-                else:  # enter amendment at previously returned index
-                    list_ammend = input('enter you ammendment here please ')
-                    if product_functions.duplicate_check(product_list,list_ammend):
-                        input('entry already exists. enter to continue : ')
-                    else:
-                        product_list[version][list_id] = list_ammend
+            else:  # enter amendment at previously returned index
+                list_id -=1
+                product = product_functions.pull_product_by_name(version,product_list[index][list_id])
+                fresh_prod = product_functions.update_product(version,product)
+                
+                if product != fresh_prod:
+                    product_functions.push_updated_product(version,fresh_prod)
 
-            elif sec_option == 4:  # removing item from list
-                list_id = product_functions.option_4(product_list[version])
+        elif sec_option == 4:  # removing item from availability
+            list_id = product_functions.option_4(product_list[index],version)
 
-                if list_id is None:  # if invalid entry was given, return to main menu
-                    continue
+            if list_id is None:  # if invalid entry was given, return to main menu
+                return True
 
-                else:
-                    # remove item at returned index
-                    product_list[version].remove(list_id)
-
-        else:
-            continue
-
+            else:
+                # remove item at returned index
+                product = product_functions.pull_product_by_name(version,list_id)
+                product_functions.deactivate_product(version,product)
+                
+    else:
+        return True
+        
 #the interactive menu for the couriers. options to add, delete and print couriers
 def courier_menu():
-    courier_dict = couriers_fun.pull_couriers()    
-    couriers = False
-    while couriers == False:
+    couriers = True
+    
+    while couriers == True:
         clear_term()
         print('Welcome to the couriers menu.')
-        courier_entry = input('1 - see all couriers\n2 - add new courier\n3 - update courier\n4 - remove courier\n0 - return to menu : ')
+        courier_entry = input('1 - see all couriers\n2 - add new courier\n3 - update courier\n4 - remove courier (inactive)\n0 - return to menu : ')
+        couriers = courier_menu_option(courier_entry)
+
+def courier_menu_option(courier_entry):
+    #exit
+    if courier_entry == '0':
+        return False 
+    
+    #print couriers
+    elif courier_entry == '1':
+        clear_term()
+        couriers_fun.print_couriers()
+        input()
+        return True
+
+    #add courier
+    elif courier_entry == '2':
+        new_hire = (couriers_fun.hire_courier())
+        couriers_fun.add_a_courier(new_hire)
+        return True
+
+    #update courier
+    elif courier_entry == '3':
+        clear_term()
+        couriers_fun.print_couriers()
         
-        #exit
-        if courier_entry == '0':
-            couriers = True 
-            continue
-        
-        #print couriers
-        elif courier_entry == '1':
-            couriers_fun.print_couriers(courier_dict)
-            input()
+        courier_dict = couriers_fun.get_couriers_dict()
+        try:
+            id = int(input('Enter id number : '))
+        except:
+            input('enter a number please')
+            return True
+            
+        for x in courier_dict:
+            if id == x['id']:
+                index = courier_dict.index(x)
+                changes = couriers_fun.update_courier(courier_dict[index])
+                couriers_fun.push_a_courier(changes)
+                return True
+        else:
+            input('invalid id, enter to continue : ')
+            return True
 
-        #add courier
-        elif courier_entry == '2':
-            id = input('enter courier id')
-            if id in courier_dict or id == '' or id is None:
-                input('id already exists/invalid')
-                continue
-            else:
-                courier_dict[id] = couriers_fun.hire_courier()
-                couriers_fun.push_couriers(courier_dict)
+    #delete courier
+    # elif courier_entry == '4':
+    #     clear_term()
+    #     couriers_fun.print_couriers()
 
-        #update courier
-        elif courier_entry == '3':
-            print(courier_dict)
-            to_edit = input('Enter id number : ')
-            if to_edit in courier_dict:
-                courier_dict[to_edit] = couriers_fun.update_courier(courier_dict[to_edit])
-                couriers_fun.push_couriers(courier_dict)
-            else:
-                input('invalid id, enter to continue : ')
+    #     to_del = input('Enter id number : ')
+    #     if to_del in courier_dict:
+    #         del courier_dict[to_del]
+    #         couriers_fun.push_couriers(courier_dict)
+    #         return True
 
-        #delete courier
-        elif courier_entry == '4':
-            print(courier_dict)
-            to_del = input('Enter id number : ')
-            if to_del in courier_dict:
-                del courier_dict[to_del]
-                couriers_fun.push_couriers(courier_dict)
-            else:
-                input('invalid id, enter to continue : ')
+    #     else:
+    #         input('invalid id, enter to continue : ')
+    #         return True

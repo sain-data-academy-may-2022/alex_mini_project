@@ -4,12 +4,12 @@
 #impoort json
 #import os
 #import product_functions as pf
-import order_functions as of
-#import couriers_fun as cf
-#import db
+#import order_functions as of
+#from decimal import Decimal
+import couriers_fun as cf
+#from db import db
 #import orders
 #import couriers
 
+cf.get_couriers_dict()
 
-of.create_order()
-of.print_order()
