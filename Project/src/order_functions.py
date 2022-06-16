@@ -130,7 +130,7 @@ def get_order_nums():
 # returns a dictonary with the format of the provided 'order form' dictionary
 def create_order():
     product_list = pf.pull_product_names()
-    couriers = cf.pull_couriers()
+    #couriers = cf.new_pull_couriers()
     # order form is used as a template to itterate through when adding the info
     order_form = {
         'first_name': 'None','last_name': 'None', 'address': 'None', 
@@ -145,11 +145,12 @@ def create_order():
             continue
         
         if key == 'courier':
-            print(couriers.keys())
-            my_random = random.choice(list(couriers.keys()))
-            order_form[key] = my_random
-            couriers[my_random]['open_orders'] +=1
-            cf.push_couriers(couriers)
+            order_form[key] = cf.random_courier()
+            # print(couriers.keys())
+            # my_random = random.choice(list(couriers.keys()))
+            # order_form[key] = my_random
+            # couriers[my_random]['open_orders'] +=1
+            # cf.push_couriers(couriers)
             continue
         
         if key =='food' or key == 'drink' or key == 'snack':

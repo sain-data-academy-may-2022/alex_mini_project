@@ -73,6 +73,7 @@ def product_menu_input(sec_option,version,product_list,index):
         elif sec_option == 1:
             product_functions.print_products(version)
             input('press Enter to return to the menu : ')
+            return True
 
         elif sec_option == 2:  # add item to list
             list_append = input(
@@ -116,60 +117,65 @@ def product_menu_input(sec_option,version,product_list,index):
         
 #the interactive menu for the couriers. options to add, delete and print couriers
 def courier_menu():
-    courier_dict = couriers_fun.pull_couriers()    
     couriers = True
     
     while couriers == True:
         clear_term()
         print('Welcome to the couriers menu.')
-        courier_entry = input('1 - see all couriers\n2 - add new courier\n3 - update courier\n4 - remove courier\n0 - return to menu : ')
-        couriers = courier_menu_option(courier_dict,courier_entry)
+        courier_entry = input('1 - see all couriers\n2 - add new courier\n3 - update courier\n4 - remove courier (inactive)\n0 - return to menu : ')
+        couriers = courier_menu_option(courier_entry)
 
-def courier_menu_option(courier_dict,courier_entry):
+def courier_menu_option(courier_entry):
     #exit
     if courier_entry == '0':
         return False 
     
     #print couriers
     elif courier_entry == '1':
-        couriers_fun.print_couriers(courier_dict)
+        clear_term()
+        couriers_fun.print_couriers()
         input()
         return True
 
     #add courier
     elif courier_entry == '2':
-        id = input('enter courier id')
-        
-        if id in courier_dict or id == '' or id is None:
-            input('id already exists/invalid')
-            return True
-        else:
-            courier_dict[id] = couriers_fun.hire_courier()
-            couriers_fun.push_couriers(courier_dict)
-            return True
+        new_hire = (couriers_fun.hire_courier())
+        couriers_fun.add_a_courier(new_hire)
+        return True
 
     #update courier
     elif courier_entry == '3':
-        print(courier_dict)
-        to_edit = input('Enter id number : ')
+        clear_term()
+        couriers_fun.print_couriers()
         
-        if to_edit in courier_dict:
-            courier_dict[to_edit] = couriers_fun.update_courier(courier_dict[to_edit])
-            couriers_fun.push_couriers(courier_dict)
+        courier_dict = couriers_fun.get_couriers_dict()
+        try:
+            id = int(input('Enter id number : '))
+        except:
+            input('enter a number please')
             return True
+            
+        for x in courier_dict:
+            if id == x['id']:
+                index = courier_dict.index(x)
+                changes = couriers_fun.update_courier(courier_dict[index])
+                couriers_fun.push_a_courier(changes)
+                return True
         else:
             input('invalid id, enter to continue : ')
             return True
 
     #delete courier
-    elif courier_entry == '4':
-        print(courier_dict)
-        to_del = input('Enter id number : ')
-        if to_del in courier_dict:
-            del courier_dict[to_del]
-            couriers_fun.push_couriers(courier_dict)
-            return True
+    # elif courier_entry == '4':
+    #     clear_term()
+    #     couriers_fun.print_couriers()
 
-        else:
-            input('invalid id, enter to continue : ')
-            return True
+    #     to_del = input('Enter id number : ')
+    #     if to_del in courier_dict:
+    #         del courier_dict[to_del]
+    #         couriers_fun.push_couriers(courier_dict)
+    #         return True
+
+    #     else:
+    #         input('invalid id, enter to continue : ')
+    #         return True
