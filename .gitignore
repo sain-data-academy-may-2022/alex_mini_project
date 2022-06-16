@@ -1566,3 +1566,5 @@ pytest.ini
 .venv/lib/python3.10/site-packages/pip/_internal/__pycache__/pyproject.cpython-310.pyc
 .venv/lib/python3.10/site-packages/pip/_internal/__pycache__/self_outdated_check.cpython-310.pyc
 .venv/lib/python3.10/site-packages/pip/_internal/__pycache__/wheel_builder.cpython-310.pyc
+Project/src/__pycache__/my_functions.cpython-310.pyc
+Project/src/__pycache__/product_functions.cpython-310.pyc
