@@ -28,3 +28,21 @@ def committing(my_con):
 def execute(my_con,sql: str,val):
     cursor = my_con.cursor()
     cursor.execute(sql,val)
+
+def connect_execute_close(sql):
+    connect = establish()
+    cursor = connect.cursor()
+    cursor.execute(sql)
+    connect.commit()
+    cursor.close()
+    shut_down(connect)
+    return True
+
+def connect_execute_close_with_val(sql,val):
+    connect = establish()
+    cursor = connect.cursor()
+    cursor.execute(sql,val)
+    connect.commit()
+    cursor.close()
+    shut_down(connect)
+    return True

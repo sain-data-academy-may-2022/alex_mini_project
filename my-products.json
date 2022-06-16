@@ -1,21 +1,21 @@
 {
     "food": [
-        "blt sandwich",
-        "burrito",
-        "burger",
-        "hot-dog",
-        "chicken and bacon sandwich"
+        1,
+        2,
+        3,
+        4,
+        5
     ],
     "drinks": [
-        "cola",
-        "coffee",
-        "tea",
-        "lemonade",
-        "chai tea"
+        1,
+        2,
+        3,
+        4,
+        5
     ],
     "snacks": [
-        "banana",
-        "apple",
-        "crisps"
+        1,
+        2,
+        3
     ]
 }

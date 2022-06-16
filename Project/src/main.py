@@ -18,13 +18,13 @@ while exit == False:
             quit()
 
         elif option == 1:  # enters food menu
-            my_functions.product_menu('food')            
+            my_functions.product_menu('food',0)            
 
         elif option == 2:  # enters drink menu
-            my_functions.product_menu('drinks')
+            my_functions.product_menu('drinks',1)
 
         elif option == 3: # enters snacks menu
-            my_functions.product_menu('snacks') #can make return bool (true) if list updated to improve performance ?)
+            my_functions.product_menu('snack',2) #can make return bool (true) if list updated to improve performance ?)
 
         elif option == 4:  # enters orders menu
             my_functions.orders_menu()
