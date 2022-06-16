@@ -24,7 +24,7 @@ while exit == False:
             my_functions.product_menu('drinks')
 
         elif option == 3: # enters snacks menu
-            my_functions.product_menu('snacks') #can make return bool (true) if list updated to improve performance ?)
+            my_functions.product_menu('snack') #can make return bool (true) if list updated to improve performance ?)
 
         elif option == 4:  # enters orders menu
             my_functions.orders_menu()

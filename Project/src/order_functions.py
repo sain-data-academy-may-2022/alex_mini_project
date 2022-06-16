@@ -20,6 +20,21 @@ def print_orders():
     cursor.close()
     db.shut_down(connection)
 
+def print_an_order(id):
+
+    sql = 'select * from orders where order_number = %s'
+    val = (id)
+    
+    connection = db.establish()
+    cursor = connection.cursor()
+    cursor.execute(sql,val)
+    
+    my_table = from_db_cursor(cursor)
+    print(my_table)
+
+    cursor.close()
+    db.shut_down(connection)
+
 def get_specific_order(number):
     connect = db.establish()
     sql = f'select * from orders where order_number = {number}'
@@ -33,9 +48,9 @@ def get_specific_order(number):
     
     return orders
     
-def amend_order(order):
-    print(order)
-    input()
+def update_order_sql(order):
+    #print(order)
+    #input()
     num = order['order_number']
     sql = "UPDATE orders SET first_name = %s,last_name = %s,address = %s,phone = %s,courier = %s,status = %s,food = %s,drink = %s,snack = %s WHERE order_number = %s "
     val = (order['first_name'],
@@ -48,7 +63,7 @@ def amend_order(order):
             order['drink'],
             order['snack'],
             num)
-    db.the_biz(sql,val)
+    db.connect_execute_close_with_val(sql,val)
 
 
 def download_orders():
@@ -114,7 +129,7 @@ def get_order_nums():
     
 # returns a dictonary with the format of the provided 'order form' dictionary
 def create_order():
-    product_list = pf.pull_produtcts()
+    product_list = pf.pull_product_names()
     couriers = cf.pull_couriers()
     # order form is used as a template to itterate through when adding the info
     order_form = {
@@ -175,9 +190,11 @@ def order_menu_amend():
         # function runs you through quick multiple choice menu to update the selected order's information
         amendment = order_amend(order)
         # returned dictionary, each key is either the same or updated and will overrite the original.
-        order = amendment
-        amend_order(order)
-        return True
+        if order != None:
+            order = amendment
+            update_order_sql(order)
+            return True
+        
     else:
         input('order not in list\nenter to continue : ')
         return False
@@ -186,7 +203,7 @@ def order_delete_from_db(order_number):
     sql = "DELETE FROM orders WHERE order_number = %s"
     val = (order_number)
     try:
-        db.the_biz(sql,val)
+        db.connect_execute_close_with_val(sql,val)
         return True
     except Exception as e:
         input(f'error occured : {e}, enter to continue')
@@ -194,6 +211,7 @@ def order_delete_from_db(order_number):
 
 def order_menu_delete():
     order_number = int(input('please enter your order number : '))
+    print_an_order(order_number)
     check = input(f'are you sure you would like to delete order {order_number}? \ny/n : ')
     order_list = get_order_nums()
 
@@ -217,7 +235,7 @@ def order_menu_update():
         new_value = order_status()
         order = get_specific_order(order_number)
         order['status'] = new_value
-        amend_order(order)
+        update_order_sql(order)
         return True
     
     else:
@@ -227,32 +245,43 @@ def order_menu_update():
 # used for updating the order status key in an order dictonary, returns the new value
 def order_status():
     new_value = ''
-    while True:
-        print('d = delivered\nt = in-transit\np = pending\nc = cooking')
-        update = input('please enter the new status : ')
-        if update == 'c' or update == 'cooking':  # if characters match, update to appropriate order status
-            new_value = 'cooking'
-            return new_value
+    running = True
+    while running:
+        new_value,running = order_status_while(new_value,running)
+        
+def order_status_while(new_value: str,running: bool):
+    
+    print('d = delivered\nt = in-transit\np = pending\nc = cooking')
+    update = input('please enter the new status : ')
+    if update == 'c' or update == 'cooking':  # if characters match, update to appropriate order status
+        new_value = 'cooking'
+        running = False
+        return new_value,running
 
-        elif update == 't' or update == 'in-transit':
-            new_value = 'in-transit'
-            return new_value
+    elif update == 't' or update == 'in-transit':
+        new_value = 'in-transit'
+        running = False
+        return new_value,running
 
-        elif update == 'd' or update == 'delivered':
-            new_value = 'delivered'
-            return new_value
+    elif update == 'd' or update == 'delivered':
+        new_value = 'delivered'
+        running = False
+        return new_value,running
 
-        elif update == 'p' or update == 'pending':
-            new_value = 'pending'
-            return new_value
+    elif update == 'p' or update == 'pending':
+        new_value = 'pending'
+        running = False
+        return new_value,running
 
-        else:
-            print('invalid entry')
+    else:
+        print('invalid entry')
+        return new_value, running
 
 # creates copy of passed order, loops through keys and returns copy so original can be updated
 def order_amend(order):
     copy = order
-    product_list = pf.pull_produtcts()
+    product_list = pf.pull_product_names()
+    print_an_order(order['order_number'])
     data = input('ammending order data y/n? : ')
     if data == 'y' or data == 'Y':  # accepts both capitals and text
         # runs through each item in the dictionary
@@ -299,10 +328,12 @@ def order_amend(order):
                 # updates entry in passed dictionary
                 copy[key] = change
             
-    print(copy)
-    return copy  # returns the dictionary passed in, but updated with new info
+        print(copy)
+        return copy  # returns the dictionary passed in, but updated with new info
+    else:
+        return None
 
-#imports from file
+#imports from json file
 def pull_orders():
     file_name = 'order_history.json'
     try:
@@ -324,8 +355,6 @@ def temp_pull_orders():
         orders = {}
         print(traceback.print_exc())
     return orders
-
-
 
 #exports to file
 def push_orders(order_list):

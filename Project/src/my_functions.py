@@ -53,33 +53,24 @@ def clear_term():  # clears the terminal
 
 #the interactive menu for each of the different product menus. options to add, update and delete can be accessed here
 def product_menu(product_type):
-    if product_type == 'food':
-        version = 0
-    elif product_type == 'drinks':
-        version = 1
-    elif product_type == 'snacks':
-        version = 2
-    else:
-        return False
     menu = True
-    product_list = product_functions.pull_produtcts()
+    product_list = product_functions.pull_product_names()
     while menu == True:
         clear_term()
         print(
             'Food\n 1 - Product List\n 2 - Create Product\n 3 - Update Product\n 4 - Delete Product\n 0 - Return To Menu')
         sec_option = input('What option would you like? ')
-        menu = product_menu_input(sec_option,version,product_list)
+        menu = product_menu_input(sec_option,version=product_type,product_list=product_list)
 
 def product_menu_input(sec_option,version,product_list):
     if sec_option.strip().isdigit():
         sec_option = int(sec_option)
 
         if sec_option == 0:  # return to main menu
-            product_functions.push_products(product_list[0],product_list[1],product_list[2])
             return False
 
         elif sec_option == 1:
-            print_list(product_list[version])
+            product_functions.print_products(version)
             input('press Enter to return to the menu')
 
         elif sec_option == 2:  # add item to list
@@ -88,8 +79,10 @@ def product_menu_input(sec_option,version,product_list):
 
             if product_functions.duplicate_check(product_list,list_append):
                 input('item already on menu, press enter to continue')
+
             else:
-                product_list[version].append(list_append)
+                prod = product_functions.create_product(list_append)
+                product_functions.push_product(version,prod)
 
         elif sec_option == 3:  # update entry
             # takes input and checks it is in correct format, returns index
@@ -99,11 +92,12 @@ def product_menu_input(sec_option,version,product_list):
                 return True
 
             else:  # enter amendment at previously returned index
-                list_ammend = input('enter you ammendment here please ')
-                if product_functions.duplicate_check(product_list,list_ammend):
-                    input('entry already exists. enter to continue : ')
-                else:
-                    product_list[version][list_id] = list_ammend
+                product = product_functions.pull_product_by_name(version,product_list[version][list_id])
+                fresh_prod = product_functions.update_product(version,product)
+                if product != fresh_prod:
+                    product_functions.push_updated_product(version,fresh_prod)
+
+                
 
         elif sec_option == 4:  # removing item from list
             list_id = product_functions.option_4(product_list[version])
@@ -122,6 +116,7 @@ def product_menu_input(sec_option,version,product_list):
 def courier_menu():
     courier_dict = couriers_fun.pull_couriers()    
     couriers = True
+    
     while couriers == True:
         clear_term()
         print('Welcome to the couriers menu.')
