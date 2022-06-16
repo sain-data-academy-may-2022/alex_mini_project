@@ -8,8 +8,7 @@ from prettytable import from_db_cursor
 
 from db import db
 
-
-
+#
 def pull_product_name(connect,table):
     names = []
 
@@ -28,6 +27,17 @@ def pull_product_name(connect,table):
     cursor.close()
     return names
 
+def deactivate_product(table,product):
+    sql = table_checker(table,delete=True)
+    # update food set active = %s where food_id =%s
+    print(sql)
+    val = (0,product['product_id'])
+    try:
+        db.connect_execute_close_with_val(sql,val)
+    except:
+        input('sql error')
+
+#
 def pull_product_names():
     prods = []
     connect = db.establish()
@@ -37,9 +47,9 @@ def pull_product_names():
     db.shut_down(connect)
     return prods
 
+#
 def create_product(name):
     prod_form = {'name':'None','price': None,'vegan':None}
-
 
     prod_form['name'] = name
     
@@ -65,6 +75,7 @@ def create_product(name):
 
     return prod_form
 
+#
 def master_pull():
     connect = db.establish()
     prods = []
@@ -76,31 +87,43 @@ def master_pull():
     db.shut_down(connect)
     return prods
 
-
-
-def table_checker(table:str, push=False, name=False, update=False):
+#
+def table_checker(table:str, push=False, name=False, update=False, delete=False):
+    if delete == True:
+        if table == 'food':
+            sql = "update food set active = %s where food_id = %s"
+            return sql
+        elif table == 'drinks':
+            sql = "update drinks set active = %s where drinks_id = %s"
+            return sql
+        elif table == 'snack':
+            sql = "update snack set active = %s where snack_id = %s"
+            return sql
+        else: 
+            return None
+    
     if update == True:
         if table == 'food':
             sql = "update food set name = %s, price = %s, vegan = %s where food_id = %s"
             return sql
         elif table == 'drinks':
-            sql = "update drinks set (name,price,vegan) where (drinks_id) VALUES (%s,%s,%s,%s)"
+            sql = "update drinks set name = %s, price = %s, vegan = %s where drinks_id = %s"
             return sql
         elif table == 'snack':
-            sql = "update snack set (name,price,vegan) where (snack_id) VALUES (%s,%s,%s,%s)"
+            sql = "update snack set name = %s, price = %s, vegan = %s where snack_id = %s"
             return sql
         else: 
             return None
     
     if name == True:
         if table == 'food':
-            sql = 'SELECT name FROM food;'
+            sql = 'SELECT name FROM food WHERE active = 1;'
             return sql
         elif table == 'drinks':
-            sql = 'SELECT name FROM drinks'
+            sql = 'SELECT name FROM drinks WHERE active = 1'
             return sql
         elif table == 'snack':
-            sql = 'SELECT name FROM snack'
+            sql = 'SELECT name FROM snack WHERE active = 1'
             return sql
         else:
             return None        
@@ -131,6 +154,7 @@ def table_checker(table:str, push=False, name=False, update=False):
         else: 
             return None
 
+#
 def new_pull_products(connect,table):
     # handles each variation of the products menu
     sql = table_checker(table)
@@ -149,11 +173,14 @@ def new_pull_products(connect,table):
 
     return products
 
+#
 def pull_product_by_name(table:str,name:str):
     connect = db.establish()
     cursor = connect.cursor()
     sql = table_checker(table)
+    print(sql)
     sql +=' WHERE name = %s'
+    print(sql)
     val = (name)
 
     cursor.execute(sql,val)
@@ -162,16 +189,22 @@ def pull_product_by_name(table:str,name:str):
     ret = {'product_id':prod[0],'name':prod[1],'price':prod[2],'vegan':prod[3]}
     return ret
 
+#
 def update_product(table:str,prod:dict):
     confirm = input(f"are you sure you want to update {prod['name']}? \ny/n : ")
     print(prod)
-    copy = prod
+    copy = {'product_id':prod['product_id'],
+            'name': prod['name'],
+            'price': prod['price'],
+            'vegan': prod['vegan']}
+            
     
     if confirm == 'y' or confirm == 'Y':
         n_name = input('input new name or ENTER to skip : ')
         
         if n_name != '':
             copy['name'] = n_name
+            print(copy)
         n_price = input('input new price or ENTER to skip : ')
         
         if n_price != '':
@@ -188,6 +221,7 @@ def update_product(table:str,prod:dict):
 
     return copy
 
+#
 def push_product(table:str,prod:dict):
     sql = table_checker(table,push=True)
     val = (prod['name'],prod['price'],prod['vegan'])
@@ -196,8 +230,7 @@ def push_product(table:str,prod:dict):
     except Exception as e:
         input(f'error occured{e}, enter to continue')
 
-
-
+#
 def push_updated_product(table:str,prod:dict):
 
     sql = table_checker(table,update=True)
@@ -208,20 +241,21 @@ def push_updated_product(table:str,prod:dict):
     except Exception as e:
         input(f'error updating table - {e}. \nENTER to continue')
 
-
-
+#
 def print_products(table:str):
     #handle each product menu
     sql = table_checker(table)
     if sql == None:
         return
+    sql += " WHERE active = %s"
+    val = (1)
     
     #create connection
     connect = db.establish()
     cursor = connect.cursor()
     
     #make and print table
-    cursor.execute(sql)
+    cursor.execute(sql,val)
     mytable = from_db_cursor(cursor)
     print(mytable)
     
@@ -241,16 +275,16 @@ def duplicate_check(my_list,check):
         return False
 
 # the menu part of the food/drinks/snacks update item option
-def option_3(product_list):
-    mf.print_list(product_list)  # prints product list, along with index ids
+def option_3(product_list,table):
+    print_products(table)  # prints product list, along with index ids
     entry = input(
         'please enter the id or name of the item you wish to update ')
     list_id = prod_input_to_index(product_list, entry)
     return list_id
 
 # the menu part of the food/drinks/snacks delete item option
-def option_4(product_list):
-    mf.print_list(product_list)  # prints product list along with index ids
+def option_4(product_list,table):
+    print_products(table)  # prints product list along with index ids
     entry = input("please enter the id or name of the item you wish to delete ")
     # function allows both text and numbers to be accepted, returns appropriate index (different text output)
     list_id = list_str_check(product_list, entry)
@@ -284,7 +318,7 @@ def list_str_check(product_list, list_id):
         list_id = int(list_id)
 
         if list_id < len(product_list):
-            return product_list[list_id]
+            return product_list[list_id-1]
 
         else:
             input('\nno product at index\n')

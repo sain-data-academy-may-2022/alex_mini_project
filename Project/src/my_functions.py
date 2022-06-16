@@ -52,7 +52,7 @@ def clear_term():  # clears the terminal
     os.system('clear')
 
 #the interactive menu for each of the different product menus. options to add, update and delete can be accessed here
-def product_menu(product_type):
+def product_menu(product_type,index):
     menu = True
     product_list = product_functions.pull_product_names()
     while menu == True:
@@ -60,9 +60,10 @@ def product_menu(product_type):
         print(
             'Food\n 1 - Product List\n 2 - Create Product\n 3 - Update Product\n 4 - Delete Product\n 0 - Return To Menu')
         sec_option = input('What option would you like? ')
-        menu = product_menu_input(sec_option,version=product_type,product_list=product_list)
+        menu = product_menu_input(sec_option,product_type,product_list,index)
 
-def product_menu_input(sec_option,version,product_list):
+def product_menu_input(sec_option,version,product_list,index):
+    clear_term()
     if sec_option.strip().isdigit():
         sec_option = int(sec_option)
 
@@ -71,14 +72,14 @@ def product_menu_input(sec_option,version,product_list):
 
         elif sec_option == 1:
             product_functions.print_products(version)
-            input('press Enter to return to the menu')
+            input('press Enter to return to the menu : ')
 
         elif sec_option == 2:  # add item to list
             list_append = input(
                 'please enter the name of your new item ')
 
             if product_functions.duplicate_check(product_list,list_append):
-                input('item already on menu, press enter to continue')
+                input('item already on menu, press enter to continue : ')
 
             else:
                 prod = product_functions.create_product(list_append)
@@ -86,29 +87,30 @@ def product_menu_input(sec_option,version,product_list):
 
         elif sec_option == 3:  # update entry
             # takes input and checks it is in correct format, returns index
-            list_id = product_functions.option_3(product_list[version])
-
+            list_id = product_functions.option_3(product_list[index],version)
+            
             if list_id is None:  # if an invalid entry was given, return to menu
                 return True
 
             else:  # enter amendment at previously returned index
-                product = product_functions.pull_product_by_name(version,product_list[version][list_id])
+                list_id -=1
+                product = product_functions.pull_product_by_name(version,product_list[index][list_id])
                 fresh_prod = product_functions.update_product(version,product)
+                
                 if product != fresh_prod:
                     product_functions.push_updated_product(version,fresh_prod)
 
-                
-
-        elif sec_option == 4:  # removing item from list
-            list_id = product_functions.option_4(product_list[version])
+        elif sec_option == 4:  # removing item from availability
+            list_id = product_functions.option_4(product_list[index],version)
 
             if list_id is None:  # if invalid entry was given, return to main menu
                 return True
 
             else:
                 # remove item at returned index
-                product_list[version].remove(list_id)
-
+                product = product_functions.pull_product_by_name(version,list_id)
+                product_functions.deactivate_product(version,product)
+                
     else:
         return True
         
