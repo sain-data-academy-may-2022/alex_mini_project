@@ -11,3 +11,6 @@ not a lot of functionality yet. 'watch this space!' to quote almost ever line ma
 updated for the sake of the kata
 
 second week of the git kata begins!!!!
+
+return of the kata. has it reached its final form ?
+find out next week on data-team z
