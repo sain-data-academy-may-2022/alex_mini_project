@@ -6,7 +6,17 @@ Project/src/__pycache__/test_couriers_fun.cpython-310-pytest-7.1.2.pyc
 Project/src/__pycache__/test_orders_fun.cpython-310-pytest-7.1.2.pyc
 Project/src/__pycache__/test_products_fun.cpython-310-pytest-7.1.2.pyc
 Project/src/logins.py 
+
+Project/src/__pycache__/
+
+
+
 .venv/bin/coverage
+.venv/bin/
+.venv/
+
+
+
 .venv/bin/coverage-3.10
 .venv/bin/coverage3
 .venv/lib/python3.10/site-packages/coverage/__init__.py
