@@ -3,7 +3,7 @@
 #import random
 #impoort json
 #import os
-#import product_functions as pf
+import product_functions as pf
 #import order_functions as of
 #from decimal import Decimal
 import couriers_fun as cf
@@ -11,5 +11,6 @@ import couriers_fun as cf
 #import orders
 #import couriers
 
-cf.get_couriers_dict()
+val = pf.pull_product_name('food')
 
+print(val)

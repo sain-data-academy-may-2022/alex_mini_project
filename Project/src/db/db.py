@@ -29,6 +29,43 @@ def execute(my_con,sql: str,val):
     cursor = my_con.cursor()
     cursor.execute(sql,val)
 
+def execute_and_return_all(sql:str,val=None):
+    #open connection
+    connect = establish()
+    cursor = connect.cursor()
+
+    if val == None:
+        cursor.execute(sql)
+    else:
+        cursor.execure(sql,val)
+    
+    #get values
+    values = cursor.fetchall()
+
+    #close connection
+    cursor.close()
+    connect.close()
+    
+    return values
+
+def execute_and_return_one(sql:str,val=None):
+    #open connection
+    connect = establish()
+    cursor = connect.cursor()
+    if val == None:
+        cursor.execute(sql)
+    else:
+        cursor.execure(sql,val)
+    
+    #get values
+    values = cursor.fetchone()
+
+    #close connection
+    cursor.close()
+    connect.close()
+    
+    return values
+
 def connect_execute_close(sql):
     connect = establish()
     cursor = connect.cursor()

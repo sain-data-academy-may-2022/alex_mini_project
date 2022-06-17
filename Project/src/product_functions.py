@@ -9,46 +9,47 @@ from prettytable import from_db_cursor
 from db import db
 
 #
-def pull_product_name(connect,table):
+def pull_product_name(table):
     names = []
 
     sql = table_checker(table,name=True)
+    # check for bad table name
     if sql == None:
         return None
 
-
-    cursor = connect.cursor()
-    cursor.execute(sql)
-    values = cursor.fetchall()
-
+    values = db.execute_and_return_all(sql)
+    
     for row in values:
         names.append(row[0])
 
-    cursor.close()
     return names
 
 def deactivate_product(table,product):
     sql = table_checker(table,delete=True)
     # update food set active = %s where food_id =%s
-    print(sql)
+    if sql == None:
+        return 'no table - error'
+
     val = (0,product['product_id'])
+        
     try:
         db.connect_execute_close_with_val(sql,val)
     except:
-        input('sql error')
+        print('sql error')
+        input
 
 #
 def pull_product_names():
     prods = []
-    connect = db.establish()
-    prods.append(pull_product_name(connect,'food'))
-    prods.append(pull_product_name(connect,'drinks'))
-    prods.append(pull_product_name(connect,'snack'))
-    db.shut_down(connect)
+    
+    prods.append(pull_product_name('food'))
+    prods.append(pull_product_name('drinks'))
+    prods.append(pull_product_name('snack'))
+    
     return prods
 
 #
-def create_product(name):
+def create_product(name:str):
     prod_form = {'name':'None','price': None,'vegan':None}
 
     prod_form['name'] = name
@@ -175,17 +176,13 @@ def new_pull_products(connect,table):
 
 #
 def pull_product_by_name(table:str,name:str):
-    connect = db.establish()
-    cursor = connect.cursor()
+    
     sql = table_checker(table)
-    print(sql)
     sql +=' WHERE name = %s'
-    print(sql)
     val = (name)
 
-    cursor.execute(sql,val)
-    prod = cursor.fetchone()
-    print(prod)
+    prod = db.execute_and_return_one(sql,val=val)
+
     ret = {'product_id':prod[0],'name':prod[1],'price':prod[2],'vegan':prod[3]}
     return ret
 
