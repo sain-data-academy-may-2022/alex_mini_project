@@ -191,7 +191,7 @@ def order_menu_amend():
         # function runs you through quick multiple choice menu to update the selected order's information
         amendment = order_amend(order)
         # returned dictionary, each key is either the same or updated and will overrite the original.
-        if order != None:
+        if amendment != None:
             order = amendment
             update_order_sql(order)
             return True
@@ -249,6 +249,7 @@ def order_status():
     running = True
     while running:
         new_value,running = order_status_while(new_value,running)
+    return new_value
         
 def order_status_while(new_value: str,running: bool):
     

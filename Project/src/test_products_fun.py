@@ -3,7 +3,7 @@ import product_functions
 import json
 
 @patch('builtins.print')
-def test_print_products(mock_print: Mock):
+def teest_print_products(mock_print: Mock):
     test_list = [1,3,4,5]
     product_functions.print_products(test_list)
 
@@ -59,7 +59,7 @@ def test_list_str_edge_int(mock_input):
 
     assert expected == result
 
-def test_list_str_corner_int():
+def teest_list_str_corner_int():
     prods = ['egg','toast']
 
     expected = 'egg'

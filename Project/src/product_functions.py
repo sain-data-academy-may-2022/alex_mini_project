@@ -331,7 +331,7 @@ def list_str_check(product_list, list_id):
         input("\nno such entry exists, sorry\n")
         return None
 
-def old_code_dont_run_please():
+#def old_code_dont_run_please
     '''
     # updates the my-products.json file with a provided set of datapoints
     def push_products(food,drinks,snacks):
@@ -371,4 +371,3 @@ def old_code_dont_run_please():
                 print(x,ind)
                 x+=1
     '''
-    pass
