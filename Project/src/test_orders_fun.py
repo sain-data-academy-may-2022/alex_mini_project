@@ -45,7 +45,7 @@ def test_pull_orders_output():
 
 #--------order_menu_delete-------
 @patch('builtins.input',side_effect=['cola','y',''])
-def test_order_menu_delete_edge_product(mock_input):
+def tesst_order_menu_delete_edge_product(mock_input):
     expect = False
     result = order_functions.order_menu_delete()
 
