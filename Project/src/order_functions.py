@@ -79,6 +79,8 @@ def download_orders():
     db.shut_down(connect)
     return orders
 
+
+#only used once. not actually in program
 def upload_all_orders(orders: list):
     connect = db.establish()
     sql = "insert into orders (first_name,last_name,address,phone,courier,status,food,drink,snack) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -100,9 +102,7 @@ def upload_all_orders(orders: list):
     db.shut_down(connect)
 
 def upload_order(order):
-    connect = db.establish()
     sql = "insert into orders (first_name,last_name,address,phone,courier,status,food,drink,snack) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    cursor = connect.cursor()
     val = (order['first_name'],
             order['last_name'],
             order['address'],
@@ -112,11 +112,10 @@ def upload_order(order):
             order['food'],
             order['drink'],
             order['snack'])
-    cursor.execute(sql,val)
-
-    connect.commit()
-    cursor.close()
-    db.shut_down(connect)
+    try:
+        db.connect_execute_close_with_val(sql,val)
+    except:
+        input('sql error! \nEnter to continue:')
 
 def get_order_nums():
     connect = db.establish()
@@ -171,11 +170,15 @@ def create_order():
                 mf.clear_term()
                 mf.print_list(product_list[index])
                 meal = input(f'please enter customers {key} item : ')
-                if meal in product_list[index]:
-                    id = product_list[index].index(meal)+1
-                    order_form[key] = id
-                    correct = True
-                    
+                for x in product_list[index]:
+                    print(x)
+                    if meal == x[0] or meal == str(x[1]):
+                        id = x[1]
+                        order_form[key] = id
+                        correct = True
+                        break
+                if correct == True:
+                    continue 
                 else:
                     input('please enter a valid input. enter to continue : ')
             continue
@@ -185,7 +188,11 @@ def create_order():
     upload_order(order_form)
 
 def order_menu_amend():
-    order_number = int(input('please enter your order number : '))
+    try:
+        order_number = int(input('please enter your order number : '))
+    except:
+        input('TypeError! enter a number\nenter to continue : ')
+        return False
     order_list = get_order_nums()
     if order_number in order_list:
         order = get_specific_order(order_number)
@@ -196,6 +203,8 @@ def order_menu_amend():
             order = amendment
             update_order_sql(order)
             return True
+        else:
+            return False
         
     else:
         input('order not in list\nenter to continue : ')
@@ -209,10 +218,16 @@ def order_delete_from_db(order_number):
         return True
     except Exception as e:
         input(f'error occured : {e}, enter to continue')
+        return False
 
+#
+def order_menu_delete():#
+    try:
+        order_number = int(input('please enter your order number : ').strip())
+    except:
+        input('numbers only please')
+        return False
 
-def order_menu_delete():
-    order_number = int(input('please enter your order number : '))
     print_an_order(order_number)
     check = input(f'are you sure you would like to delete order {order_number}? \ny/n : ')
     order_list = get_order_nums()
@@ -249,6 +264,8 @@ def order_status():
     new_value = ''
     running = True
     while running:
+        print('\n',new_value)
+        print('\n',running)
         new_value,running = order_status_while(new_value,running)
     return new_value
         
@@ -278,7 +295,7 @@ def order_status_while(new_value: str,running: bool):
 
     else:
         print('invalid entry')
-        return new_value, running
+        return new_value, True
 
 # creates copy of passed order, loops through keys and returns copy so original can be updated
 def order_amend(order):
@@ -337,35 +354,35 @@ def order_amend(order):
         return None
 
 #imports from json file
-def pull_orders():
-    file_name = 'order_history.json'
-    try:
-        with open(file_name) as file:
-            orders = json.load(file)
-    except Exception as e:
-        print(file_name,'not found, new file will be created',e)
-        orders = {}
-        print(traceback.print_exc())
-    return orders
+# def pull_orders():
+#     file_name = 'order_history.json'
+#     try:
+#         with open(file_name) as file:
+#             orders = json.load(file)
+#     except Exception as e:
+#         print(file_name,'not found, new file will be created',e)
+#         orders = {}
+#         print(traceback.print_exc())
+#     return orders
 
-def temp_pull_orders():
-    file_name = 'order_history copy.json'
-    try:
-        with open(file_name) as file:
-            orders = json.load(file)
-    except Exception as e:
-        print(file_name,'not found, new file will be created',e)
-        orders = {}
-        print(traceback.print_exc())
-    return orders
+# def temp_pull_orders():
+#     file_name = 'order_history copy.json'
+#     try:
+#         with open(file_name) as file:
+#             orders = json.load(file)
+#     except Exception as e:
+#         print(file_name,'not found, new file will be created',e)
+#         orders = {}
+#         print(traceback.print_exc())
+#     return orders
 
-#exports to file
-def push_orders(order_list):
-    file_name = 'order_history.json'
-    try:
-        with open(file_name,'w') as file:
-            new = json.dumps(order_list, indent='   ')
-            file.write(new)
-    except Exception as e:
-        print('unable to update / create',file_name)
-        print(traceback.print_exc(),e)
+# #exports to file
+# def push_orders(order_list):
+#     file_name = 'order_history.json'
+#     try:
+#         with open(file_name,'w') as file:
+#             new = json.dumps(order_list, indent='   ')
+#             file.write(new)
+#     except Exception as e:
+#         print('unable to update / create',file_name)
+#         print(traceback.print_exc(),e)
