@@ -109,9 +109,6 @@ def product_menu_input(sec_option,version,product_list,index):
 
             else:
                 # remove item at returned index
-                print(version)
-                print(list_id)
-                input()
                 product = product_functions.pull_product_by_name(version,list_id)
                 product_functions.deactivate_product(version,product)
                 

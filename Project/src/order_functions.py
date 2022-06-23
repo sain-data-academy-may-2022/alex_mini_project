@@ -157,10 +157,13 @@ def create_order():
             correct = False
             
             if key == 'food':
+                table = 'food'
                 index = 0
             if key == 'drink':
+                table = 'drinks'
                 index = 1
             if key == 'snack':
+                table = 'snack'
                 index = 2
             
             # prints the product lists
@@ -168,15 +171,15 @@ def create_order():
 
             while correct == False:
                 mf.clear_term()
-                mf.print_list(product_list[index])
+                pf.print_products(table)
                 meal = input(f'please enter customers {key} item : ')
                 for x in product_list[index]:
-                    print(x)
                     if meal == x[0] or meal == str(x[1]):
                         id = x[1]
                         order_form[key] = id
                         correct = True
                         break
+
                 if correct == True:
                     continue 
                 else:
@@ -188,11 +191,13 @@ def create_order():
     upload_order(order_form)
 
 def order_menu_amend():
+    print_orders()
     try:
         order_number = int(input('please enter your order number : '))
     except:
         input('TypeError! enter a number\nenter to continue : ')
         return False
+    mf.clear_term()
     order_list = get_order_nums()
     if order_number in order_list:
         order = get_specific_order(order_number)
@@ -222,12 +227,14 @@ def order_delete_from_db(order_number):
 
 #
 def order_menu_delete():#
+    print_orders()
     try:
         order_number = int(input('please enter your order number : ').strip())
     except:
         input('numbers only please')
         return False
 
+    mf.clear_term()
     print_an_order(order_number)
     check = input(f'are you sure you would like to delete order {order_number}? \ny/n : ')
     order_list = get_order_nums()
@@ -245,6 +252,7 @@ def order_menu_delete():#
         return False
 
 def order_menu_update():
+    print_orders()
     order_number = int(input('please enter your order number : '))
     order_list = get_order_nums()        
     # if entry in dict, call update function, assign value and then update source file. else return to menu
@@ -313,15 +321,18 @@ def order_amend(order):
             elif key in ['food','drink','snack']:
                 correct = True
                 if key == 'food':
+                    table = 'food'
                     index = 0
                 elif key == 'drink':
+                    table = 'drinks'
                     index = 1
                 elif key == 'snack':
+                    table = 'snack'
                     index = 2
                 
                 while correct:  # loop used to make sure they can only enter items on the menu
                     mf.clear_term()
-                    print(product_list[index])
+                    pf.print_products(table)
                     print(key,' : ', value, 'enter ammendment or enter to skip : ')
                     change = input()
                     if change == '':
@@ -329,12 +340,12 @@ def order_amend(order):
                         break
                     else:
                         # if item is in the menu then great!, else try again
-                        if change in product_list[index]:
-                            change = int(product_list[index].index(change)+1)
-                            print(change)
-                            input()
-                            correct = False
-                            break
+                        for x in product_list[index]:
+                            if change == x[0] or change == str(x[1]):
+                                id = x[1]
+                                copy[key] = id
+                                correct = False
+                                break
                         else:
                             input('item not on menu, enter to try again : ')
                             continue

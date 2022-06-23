@@ -185,7 +185,7 @@ def test_upload_order_except(mock_con_ex:Mock,mock_input:Mock):
     mock_input.assert_called_once()
 
 #--------create_order-------------
-@patch('my_functions.print_list')
+@patch('product_functions.print_products')
 @patch('my_functions.clear_term')
 @patch('couriers_fun.random_courier',side_effect=[2])
 @patch('builtins.input',side_effect=['Alex','Parham','BH8 8LW','07860251308','0','1','2'])
@@ -206,7 +206,7 @@ def test_create_order(mock_upload:Mock,mock_names:Mock,mock_input:Mock,mock_cour
     mock_clear.assert_called()
     mock_l_print.assert_called()
 
-@patch('my_functions.print_list')
+@patch('product_functions.print_products')
 @patch('my_functions.clear_term')
 @patch('couriers_fun.random_courier',side_effect=[2])
 @patch('builtins.input',side_effect=['Alex','Parham','BH8 8LW','07860251308','egg','tea','orange'])
@@ -227,7 +227,7 @@ def test_create_order_names(mock_upload:Mock,mock_names:Mock,mock_input:Mock,moc
     mock_clear.assert_called()
     mock_l_print.assert_called()
 
-@patch('my_functions.print_list')
+@patch('product_functions.print_products')
 @patch('my_functions.clear_term')
 @patch('couriers_fun.random_courier',side_effect=[2])
 @patch('builtins.input',side_effect=['Alex','Parham','BH8 8LW','07860251308','5','','0','5','','1','5','','2'])
@@ -251,7 +251,7 @@ def test_create_order_loop_check(mock_upload:Mock,mock_names:Mock,mock_input:Moc
     mock_clear.assert_called()
     mock_l_print.assert_called()
 
-@patch('my_functions.print_list')
+@patch('product_functions.print_products')
 @patch('my_functions.clear_term')
 @patch('couriers_fun.random_courier',side_effect=[2])
 @patch('builtins.input',side_effect=['Alex','Parham','BH8 8LW','07860251308','5','','0','1.1','','1','soup','','2'])
