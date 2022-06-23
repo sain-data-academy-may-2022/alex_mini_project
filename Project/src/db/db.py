@@ -37,7 +37,7 @@ def execute_and_return_all(sql:str,val=None):
     if val == None:
         cursor.execute(sql)
     else:
-        cursor.execure(sql,val)
+        cursor.execute(sql,val)
     
     #get values
     values = cursor.fetchall()
@@ -55,7 +55,7 @@ def execute_and_return_one(sql:str,val=None):
     if val == None:
         cursor.execute(sql)
     else:
-        cursor.execure(sql,val)
+        cursor.execute(sql,val)
     
     #get values
     values = cursor.fetchone()
@@ -83,3 +83,11 @@ def connect_execute_close_with_val(sql,val):
     cursor.close()
     shut_down(connect)
     return True
+
+# create_food_table_sql = "CREATE TABLE IF NOT EXISTS food
+    # (food_id INT NOT NULL, 
+    # Name VARCHAR(255), 
+    # price DECIMAL(4,2) NOT NULL, 
+    # vegan TINYINT NOT NULL, 
+    # active TINYINT NOT NULL);"
+

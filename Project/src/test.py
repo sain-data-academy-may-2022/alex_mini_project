@@ -4,13 +4,11 @@
 #impoort json
 #import os
 import product_functions as pf
-#import order_functions as of
+import order_functions as of
 #from decimal import Decimal
 import couriers_fun as cf
 #from db import db
 #import orders
 #import couriers
 
-val = pf.pull_product_name('food')
-
-print(val)
+logins = {'username':'bob','password':'asdhfijkasbdfjgknasjkvc'}

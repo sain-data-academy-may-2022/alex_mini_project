@@ -9,6 +9,25 @@ from prettytable import from_db_cursor
 from db import db
 
 #
+def pull_product_name_plus_id(table):
+    names = []
+
+    sql = table_checker(table,name=True)
+    # check for bad table name
+    if sql == None:
+        return None
+
+    values = db.execute_and_return_all(sql)
+    
+    for row in values:
+        val = []
+        val.append(row[0])
+        val.append(row[1])
+        names.append(val)
+
+    return names
+
+#
 def pull_product_name(table):
     names = []
 
@@ -42,9 +61,9 @@ def deactivate_product(table,product):
 def pull_product_names():
     prods = []
     
-    prods.append(pull_product_name('food'))
-    prods.append(pull_product_name('drinks'))
-    prods.append(pull_product_name('snack'))
+    prods.append(pull_product_name_plus_id('food'))
+    prods.append(pull_product_name_plus_id('drinks'))
+    prods.append(pull_product_name_plus_id('snack'))
     
     return prods
 
@@ -118,13 +137,13 @@ def table_checker(table:str, push=False, name=False, update=False, delete=False)
     
     if name == True:
         if table == 'food':
-            sql = 'SELECT name FROM food WHERE active = 1;'
+            sql = 'SELECT name, food_id FROM food WHERE active = 1;'
             return sql
         elif table == 'drinks':
-            sql = 'SELECT name FROM drinks WHERE active = 1'
+            sql = 'SELECT name, drinks_id FROM drinks WHERE active = 1'
             return sql
         elif table == 'snack':
-            sql = 'SELECT name FROM snack WHERE active = 1'
+            sql = 'SELECT name, snack_id FROM snack WHERE active = 1'
             return sql
         else:
             return None        
@@ -214,7 +233,7 @@ def update_product(table:str,prod:dict):
         n_vegan = input('input new vegan status or ENTER to skip : ')
         if n_vegan != '':
             if n_vegan == '0' or n_vegan == '1':
-                copy['vegan'] = n_vegan
+                copy['vegan'] = int(n_vegan)
 
     return copy
 
@@ -276,7 +295,7 @@ def option_3(product_list,table):
     print_products(table)  # prints product list, along with index ids
     entry = input(
         'please enter the id or name of the item you wish to update ')
-    list_id = prod_input_to_index(product_list, entry)
+    list_id = new_list_str_check(product_list, entry)
     return list_id
 
 # the menu part of the food/drinks/snacks delete item option
@@ -284,11 +303,38 @@ def option_4(product_list,table):
     print_products(table)  # prints product list along with index ids
     entry = input("please enter the id or name of the item you wish to delete ")
     # function allows both text and numbers to be accepted, returns appropriate index (different text output)
-    list_id = list_str_check(product_list, entry)
+    list_id = new_list_str_check(product_list, entry)
     return list_id
 
+def prod_input_to_index(product_list:list, list_id:str):
+    if list_id.strip().isdigit():  # if input is a number convert to int
+        list_id = int(list_id)
+        
+        for ind in product_list:
+            index = product_list.index(ind)
+            
+            if list_id in product_list[index]:
+                return list_id
+        
+        input("\nno product at index\n")
+        return None
+
+    else: 
+        # if it is a string, check the index location if it has one and store it
+        
+        for ind in product_list:
+            index = product_list.index(ind)
+            if list_id in product_list[index][0]:
+                return product_list[index][1]
+            else:
+                continue
+
+   
+        input("\nno such entry exists\n")
+        return None
+
 #returns the in index from a list, takes both string and int as input
-def prod_input_to_index(product_list, list_id):
+def old_prod_input_to_index(product_list, list_id):
     if list_id.strip().isdigit():  # if input is a number convert to int
         list_id = int(list_id)
 
@@ -308,8 +354,40 @@ def prod_input_to_index(product_list, list_id):
         input("\nno such entry exists\n")
         return None
 
+def new_list_str_check(product_list:list, list_id:str):
+    if list_id == '':
+        return None
+
+    if list_id.strip().isdigit():  # if input is a number convert to int
+        list_id = int(list_id)
+        
+        for ind in product_list:
+            index = product_list.index(ind)
+            
+            if list_id in product_list[index]:
+                return product_list[index][0]
+        
+        input("\nno product at index\n")
+        return None
+
+    else: # if it is a string, check the index location if it has one and store it
+        
+        for ind in product_list:
+            index = product_list.index(ind)
+            if list_id in product_list[index][0]:
+                return list_id
+            else:
+                continue
+   
+        input("\nno such entry exists\n")
+        return None
+
 #returns the string value from a list, accepts both string and int values as input
-def list_str_check(product_list, list_id):
+
+
+#def old_code_dont_run_please
+    '''
+    def list_str_check(product_list, list_id):
     #list_id = input("please enter the id or name of the item you wish to delete ")
     if list_id.strip().isdigit():
         list_id = int(list_id)
@@ -328,8 +406,6 @@ def list_str_check(product_list, list_id):
         input("\nno such entry exists, sorry\n")
         return None
 
-#def old_code_dont_run_please
-    '''
     # updates the my-products.json file with a provided set of datapoints
     def push_products(food,drinks,snacks):
         prod_dict = {'food': food, 'drinks': drinks,'snacks':snacks}
@@ -341,6 +417,7 @@ def list_str_check(product_list, list_id):
         except Exception as e:
             print('unable to create / find', file_name)
             print(traceback.print_exc(),e)
+    
     # returns the contents of my-products.json as a nested list
     def pull_products(): 
         products = []

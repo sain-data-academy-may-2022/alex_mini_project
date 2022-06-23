@@ -44,6 +44,7 @@ def get_specific_order(number):
     desc = cursor.description
     
     col_names = [col[0] for col in desc]
+
     orders = dict(zip(col_names, cursor.fetchone()))
     
     return orders
